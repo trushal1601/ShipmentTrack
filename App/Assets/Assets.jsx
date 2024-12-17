@@ -24,4 +24,6 @@ export const Images = {
   uk_icon: require('../Assets/Images/uk.png'),
   sradio: require('../Assets/Images/SRadiobutton.png'),
   UnSradio: require('../Assets/Images/UnSRadioButton.png'),
+  back_icon: require('../Assets/Images/back.png'),
+  mail_icon: require('../Assets/Images/mail.png'),
 };

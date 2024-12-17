@@ -35,7 +35,7 @@ const ChooseLanguage = () => {
             <TouchableWithoutFeedback onPress={() => handlePress(item)}>
               <View style={styles.listItem}>
                 <View style={styles.itemContent}>
-                  <Image source={item.icon} style={styles.itemIcon} />
+                  <Image source={getImageSource(item.icon)} style={styles.itemIcon} />
                   <Text style={styles.itemText}>{item.name}</Text>
                 </View>
                 <Image
