@@ -8,4 +8,9 @@ export const Labels = {
   Email: 'Email',
   otp: 'OTP Verification',
   otpBio: 'We have just sent OTP code to your below email id',
+  ShipmentData: 'Shipment Data',
+  DeliveriesAssigned: 'Deliveries Assigned',
+  CompletedDeliveries: 'Completed Deliveries',
+  PendingDeliveries: 'Pending Deliveries',
+  DelayedDeliveries: 'Delayed Deliveries',
 };

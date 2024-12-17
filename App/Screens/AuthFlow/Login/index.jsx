@@ -19,7 +19,7 @@ const Login = ({navigation}) => {
       initialValues={{email: ''}}
       validationSchema={validationSchema}
       onSubmit={values => {
-        console.log(values);
+        // console.log(values);
         navigation.navigate('OTPVerify', {email: values.email});
       }}>
       {({handleChange, handleBlur, handleSubmit, values, errors, touched}) => (
@@ -105,6 +105,8 @@ const styles = StyleSheet.create({
   errorText: {
     color: 'red',
     marginTop: Scale(5),
+    fontSize: Scale(14),
+    fontFamily: Fonts.proximanova_regular,
   },
   buttonContainer: {
     marginTop: Scale(20),

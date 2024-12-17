@@ -1,5 +1,5 @@
-import {Image, StyleSheet, Text, TextInput, View, FlatList} from 'react-native';
-import React, {useState, useRef} from 'react';
+import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import React, {useState, useEffect} from 'react';
 import {Colors, Fonts, Images} from '../../../Assets/Assets';
 import Scale from '../../../Helper/Responsive';
 import {Labels} from '../../../Assets/Labels';
@@ -7,44 +7,41 @@ import {getImageSource} from '../../../Helper/ImageUri';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 import {Button} from '../../../Components/Component';
+import {
+  CodeField,
+  Cursor,
+  useBlurOnFulfill,
+  useClearByFocusCell,
+} from 'react-native-confirmation-code-field';
+import {useNavigation} from '@react-navigation/native';
 
-const OTPVerify = ({route}) => {
+const OTPVerify = ({route, initialSeconds = 60}) => {
+  const navigation = useNavigation();
   const {email} = route.params;
-  console.log(email);
-
-  const [otp, setOtp] = useState(['', '', '', '']);
-  const inputs = useRef([]);
-
-  const handleOtpChange = (text, index) => {
-    if (text.length === 1 && index < otp.length - 1) {
-      inputs.current[index + 1].focus();
-    }
-    const newOtp = [...otp];
-    newOtp[index] = text;
-    setOtp(newOtp);
-  };
-
-  const handleKeyPress = (e, index) => {
-    if (e.nativeEvent.key === 'Backspace' && index > 0 && otp[index] === '') {
-      inputs.current[index - 1].focus();
-    }
-  };
+  const [otp, setOtp] = useState('');
+  const CELL_COUNT = 4;
+  const ref = useBlurOnFulfill({value: otp, cellCount: CELL_COUNT});
+  const [props, getCellOnLayoutHandler] = useClearByFocusCell({
+    value: otp,
+    setValue: setOtp,
+  });
 
   const validationSchema = Yup.object().shape({
     otp: Yup.string().required('OTP is required'),
   });
 
-  const renderItem = ({item, index}) => (
-    <TextInput
-      ref={el => (inputs.current[index] = el)}
-      keyboardType="numeric"
-      style={styles.input}
-      value={item}
-      onChangeText={text => handleOtpChange(text, index)}
-      onKeyPress={e => handleKeyPress(e, index)}
-      maxLength={1}
-    />
-  );
+  const [seconds, setSeconds] = useState(initialSeconds);
+  useEffect(() => {
+    if (seconds > 0) {
+      const timerId = setInterval(() => setSeconds(seconds - 1), 1000);
+      return () => clearInterval(timerId);
+    }
+  }, [seconds]);
+  const formatTime = seconds => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
+  };
 
   return (
     <Formik
@@ -52,14 +49,24 @@ const OTPVerify = ({route}) => {
       validationSchema={validationSchema}
       onSubmit={values => {
         console.log(values);
-        // navigation.navigate('OTPVerify', { otp: values.otp });
       }}>
       {({handleChange, handleBlur, handleSubmit, values, errors, touched}) => (
         <View style={{backgroundColor: Colors.White, flex: 1}}>
-          <Image
-            source={getImageSource(Images.back_icon)}
-            style={{height: Scale(24), width: Scale(24), margin: Scale(15)}}
-          />
+          <TouchableOpacity
+            onPress={() => navigation.goBack()}
+            style={{
+              alignSelf: 'flex-start',
+              backgroundColor: Colors.White,
+            }}>
+            <Image
+              source={getImageSource(Images.back_icon)}
+              style={{
+                height: Scale(24),
+                width: Scale(24),
+                margin: Scale(15),
+              }}
+            />
+          </TouchableOpacity>
           <View style={styles.innerContainer}>
             <Text style={styles.headerText}>{Labels.otp}</Text>
             <Text style={styles.bioText}>{Labels.otpBio}</Text>
@@ -82,12 +89,25 @@ const OTPVerify = ({route}) => {
                 {email}
               </Text>
             </View>
-            <FlatList
-              data={otp}
-              horizontal
-              renderItem={renderItem}
-              keyExtractor={(item, index) => index.toString()}
-              contentContainerStyle={{marginTop: 20, gap: 20}}
+            <CodeField
+              ref={ref}
+              {...props}
+              value={otp}
+              onChangeText={setOtp}
+              cellCount={CELL_COUNT}
+              rootStyle={styles.codeFieldRoot}
+              keyboardType="number-pad"
+              textContentType="oneTimeCode"
+              renderCell={({index, symbol, isFocused}) => (
+                <View
+                  onLayout={getCellOnLayoutHandler(index)}
+                  key={index}
+                  style={[styles.cell, isFocused && styles.focusCell]}>
+                  <Text style={styles.cellText}>
+                    {symbol || (isFocused ? <Cursor /> : null)}
+                  </Text>
+                </View>
+              )}
             />
             {touched.otp && errors.otp && (
               <Text style={styles.errorText}>{errors.otp}</Text>
@@ -104,10 +124,15 @@ const OTPVerify = ({route}) => {
                   color: Colors.Grey300,
                   fontFamily: Fonts.proximanova_regular,
                 }}>
-                1:58
+                {formatTime(seconds)}
               </Text>
             </Text>
-            <Button value={'Verify'} disabled={!values.otp || !!errors.otp} />
+            <Button
+              value={'Verify'}
+              disabled={otp.length < CELL_COUNT || !!errors.otp}
+              //   onPress={()=> navigation.goBack()}
+              style={{marginTop: Scale(20)}}
+            />
           </View>
         </View>
       )}
@@ -133,13 +158,27 @@ const styles = StyleSheet.create({
     fontSize: Scale(14),
     width: '80%',
   },
-  input: {
-    borderWidth: 1,
-    borderRadius: 10,
+  codeFieldRoot: {
+    marginTop: Scale(20),
+    paddingRight: Scale(80),
+  },
+  cell: {
+    width: Scale(52),
+    height: Scale(52),
+    lineHeight: Scale(36),
+    fontSize: Scale(24),
+    borderWidth: Scale(2),
     borderColor: Colors.Grey100,
-    height: 54,
-    width: 50,
-    fontSize: 24,
     textAlign: 'center',
+    borderRadius: Scale(10),
+  },
+  focusCell: {
+    borderColor: Colors.Grey400,
+  },
+  cellText: {
+    fontSize: 24,
+    color: Colors.Grey400,
+    textAlign: 'center',
+    marginTop: Scale(8),
   },
 });

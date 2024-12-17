@@ -35,7 +35,10 @@ const ChooseLanguage = () => {
             <TouchableWithoutFeedback onPress={() => handlePress(item)}>
               <View style={styles.listItem}>
                 <View style={styles.itemContent}>
-                  <Image source={getImageSource(item.icon)} style={styles.itemIcon} />
+                  <Image
+                    source={getImageSource(item.icon)}
+                    style={styles.itemIcon}
+                  />
                   <Text style={styles.itemText}>{item.name}</Text>
                 </View>
                 <Image
@@ -86,7 +89,7 @@ const styles = StyleSheet.create({
   overlay: {
     backgroundColor: '#36393c',
     flex: 1,
-    opacity: 0.7,
+    opacity: 0.75,
   },
   content: {
     position: 'absolute',
