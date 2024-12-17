@@ -1,6 +1,8 @@
 import {Text, View} from 'react-native';
 import React, {useEffect} from 'react';
 import SplashScreen from 'react-native-splash-screen';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
+import MainNavigator from './App/Navigator/MainNavigator';
 
 const App = () => {
   useEffect(() => {
@@ -10,9 +12,9 @@ const App = () => {
     return () => clearTimeout(timeOut);
   }, []);
   return (
-    <View>
-      <Text>App</Text>
-    </View>
+    <GestureHandlerRootView>
+      <MainNavigator />
+    </GestureHandlerRootView>
   );
 };
 
