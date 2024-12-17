@@ -2,6 +2,7 @@ import {
   FlatList,
   Image,
   ImageBackground,
+  StatusBar,
   StyleSheet,
   Text,
   TouchableWithoutFeedback,
@@ -27,6 +28,7 @@ const ChooseLanguage = () => {
   const Footer = () => {
     return (
       <View style={styles.listContainer}>
+        {/* <StatusBar /> */}
         <FlatList
           data={CountryData}
           contentContainerStyle={{paddingBottom: Scale(15)}}

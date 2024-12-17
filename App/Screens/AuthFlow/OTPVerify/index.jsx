@@ -1,4 +1,11 @@
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  Image,
+  Pressable,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {Colors, Fonts, Images} from '../../../Assets/Assets';
 import Scale from '../../../Helper/Responsive';
@@ -19,6 +26,7 @@ const OTPVerify = ({route, initialSeconds = 60}) => {
   const navigation = useNavigation();
   const {email} = route.params;
   const [otp, setOtp] = useState('');
+  const [isOtpExpired, setIsOtpExpired] = useState(false);
   const CELL_COUNT = 4;
   const ref = useBlurOnFulfill({value: otp, cellCount: CELL_COUNT});
   const [props, getCellOnLayoutHandler] = useClearByFocusCell({
@@ -35,12 +43,21 @@ const OTPVerify = ({route, initialSeconds = 60}) => {
     if (seconds > 0) {
       const timerId = setInterval(() => setSeconds(seconds - 1), 1000);
       return () => clearInterval(timerId);
+    } else {
+      setIsOtpExpired(true);
     }
   }, [seconds]);
+
   const formatTime = seconds => {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
     return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
+  };
+
+  const handleResend = () => {
+    setSeconds(initialSeconds);
+    setIsOtpExpired(false);
+    // Add resend OTP logic here
   };
 
   return (
@@ -112,25 +129,42 @@ const OTPVerify = ({route, initialSeconds = 60}) => {
             {touched.otp && errors.otp && (
               <Text style={styles.errorText}>{errors.otp}</Text>
             )}
-            <Text
-              style={{
-                color: Colors.Grey200,
-                fontFamily: Fonts.proximanova_regular,
-                marginTop: 15,
-              }}>
-              Resend code in{' '}
+
+            {isOtpExpired ? (
+              <View style={{flexDirection: 'row', marginTop: Scale(10)}}>
+                <Text
+                  style={{
+                    color: Colors.Grey200,
+                    fontFamily: Fonts.proximanova_regular,
+                    marginRight: Scale(5),
+                  }}>
+                  Entered OTP is invalid or expired.
+                </Text>
+                <Pressable onPress={handleResend}>
+                  <Text style={styles.resendText}>Resend</Text>
+                </Pressable>
+              </View>
+            ) : (
               <Text
                 style={{
-                  color: Colors.Grey300,
+                  color: Colors.Grey200,
                   fontFamily: Fonts.proximanova_regular,
+                  marginTop: 15,
                 }}>
-                {formatTime(seconds)}
+                Resend code in{' '}
+                <Text
+                  style={{
+                    color: Colors.Grey300,
+                    fontFamily: Fonts.proximanova_regular,
+                  }}>
+                  {formatTime(seconds)}
+                </Text>
               </Text>
-            </Text>
+            )}
             <Button
               value={'Verify'}
               disabled={otp.length < CELL_COUNT || !!errors.otp}
-              //   onPress={()=> navigation.goBack()}
+              onPress={() => navigation.navigate('home')}
               style={{marginTop: Scale(20)}}
             />
           </View>
@@ -176,9 +210,20 @@ const styles = StyleSheet.create({
     borderColor: Colors.Grey400,
   },
   cellText: {
-    fontSize: 24,
+    fontSize: Scale(24),
     color: Colors.Grey400,
     textAlign: 'center',
     marginTop: Scale(8),
+  },
+  errorText: {
+    color: Colors.Red,
+    fontFamily: Fonts.proximanova_regular,
+    marginTop: Scale(10),
+  },
+  resendText: {
+    color: Colors.Primary,
+    fontFamily: Fonts.proximanova_bold,
+    textAlign: 'center',
+    textDecorationLine: 'underline',
   },
 });
