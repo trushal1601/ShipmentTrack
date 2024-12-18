@@ -13,4 +13,6 @@ export const Labels = {
   CompletedDeliveries: 'Completed Deliveries',
   PendingDeliveries: 'Pending Deliveries',
   DelayedDeliveries: 'Delayed Deliveries',
+  logout: 'Logout',
+  Done: 'Done',
 };

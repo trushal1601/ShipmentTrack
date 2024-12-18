@@ -16,10 +16,9 @@ const TabNavigator = () => {
         headerShown: false,
         tabBarHideOnKeyboard: true,
         tabBarStyle: {
-          borderTopLeftRadius: Scale(20),
-          borderTopRightRadius: Scale(20),
           height: Scale(55),
           backgroundColor: Colors.White,
+          // paddingVertical:14,
           // Android shadow
           elevation: 30,
           // iOS shadow

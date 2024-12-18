@@ -1,7 +1,8 @@
-import {Text, TouchableOpacity, StyleSheet} from 'react-native';
-import {Colors, Fonts} from '../Assets/Assets';
+import {Text, TouchableOpacity, StyleSheet, View, Image} from 'react-native';
+import {Colors, Fonts, Images} from '../Assets/Assets';
 import Scale from '../Helper/Responsive';
 import {useNavigation} from '@react-navigation/native';
+import { getImageSource } from '../Helper/ImageUri';
 
 export const Button = ({value, onPress, style, disabled}) => {
   return (
@@ -16,7 +17,35 @@ export const Button = ({value, onPress, style, disabled}) => {
   );
 };
 
+export const Header = ({header, headerVisible}) => {
+  const navigation = useNavigation();
+  return (
+    <View>
+      <View style={styles.headerContainer}>
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
+          style={{alignSelf: 'flex-start'}}>
+          <Image
+            source={getImageSource(Images.back_icon)}
+            style={styles.backIcon}
+          />
+        </TouchableOpacity>
+        {/* {headerVisible ? ( */}
+        <Text style={styles.headerText} numberOfLines={1}>
+          {header}
+        </Text>
+        {/* ) : (
+          <Text></Text>
+        )} */}
+        <View style={{width: Scale(40)}}></View>
+      </View>
+    </View>
+  );
+};
+
 const styles = StyleSheet.create({
+  //button
+
   button: {
     backgroundColor: Colors.Primary,
     padding: Scale(10),
@@ -34,5 +63,21 @@ const styles = StyleSheet.create({
   },
   textDisabled: {
     color: Colors.Grey200,
+  },
+  //header
+  headerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  backIcon: {
+    height: Scale(24),
+    width: Scale(24),
+    margin: Scale(15),
+  },
+  headerText: {
+    fontFamily: Fonts.proximanova_regular,
+    color: Colors.Black,
+    fontSize: Scale(20),
   },
 });

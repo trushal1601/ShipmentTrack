@@ -16,38 +16,38 @@ import {CountryData} from '../../../Helper/JsonData';
 import {Button} from '../../../Components/Component';
 import {Labels} from '../../../Assets/Labels';
 import {useNavigation} from '@react-navigation/native';
+import ChooseLanguageStyle from './ChooseLanguageStyle';
 
 const ChooseLanguage = () => {
-  const navigationSSS = useNavigation();
+  const navigation = useNavigation();
   const [selectedItem, setSelectedItem] = useState(CountryData[0]?.id);
 
   const handlePress = item => {
     setSelectedItem(item.id);
   };
-
   const Footer = () => {
     return (
-      <View style={styles.listContainer}>
-        {/* <StatusBar /> */}
+      <View style={ChooseLanguageStyle.listContainer}>
+        {/* <StatusBar translucent backgroundColor="transparent" barStyle={'dark-content'}/> */}
         <FlatList
           data={CountryData}
           contentContainerStyle={{paddingBottom: Scale(15)}}
           keyExtractor={item => item.id.toString()}
           renderItem={({item}) => (
             <TouchableWithoutFeedback onPress={() => handlePress(item)}>
-              <View style={styles.listItem}>
-                <View style={styles.itemContent}>
+              <View style={ChooseLanguageStyle.listItem}>
+                <View style={ChooseLanguageStyle.itemContent}>
                   <Image
                     source={getImageSource(item.icon)}
-                    style={styles.itemIcon}
+                    style={ChooseLanguageStyle.itemIcon}
                   />
-                  <Text style={styles.itemText}>{item.name}</Text>
+                  <Text style={ChooseLanguageStyle.itemText}>{item.name}</Text>
                 </View>
                 <Image
                   source={
                     selectedItem === item.id ? Images.sradio : Images.UnSradio
                   }
-                  style={styles.radioIcon}
+                  style={ChooseLanguageStyle.radioIcon}
                 />
               </View>
             </TouchableWithoutFeedback>
@@ -55,21 +55,21 @@ const ChooseLanguage = () => {
         />
         <Button
           value={Labels.continue}
-          onPress={() => navigationSSS.navigate('loginScreen')}
+          onPress={() => navigation.navigate('loginScreen')}
         />
       </View>
     );
   };
 
   return (
-    <View style={styles.container}>
+    <View style={ChooseLanguageStyle.container}>
       <ImageBackground
         source={getImageSource(Images.bg_img)}
         resizeMode="cover"
-        style={styles.background}>
-        <View style={styles.overlay} />
-        <View style={styles.content}>
-          <Text style={styles.title}>{Labels.language}</Text>
+        style={ChooseLanguageStyle.background}>
+        <View style={ChooseLanguageStyle.overlay} />
+        <View style={ChooseLanguageStyle.content}>
+          <Text style={ChooseLanguageStyle.title}>{Labels.language}</Text>
           {Footer()}
         </View>
       </ImageBackground>
@@ -78,68 +78,3 @@ const ChooseLanguage = () => {
 };
 
 export default ChooseLanguage;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  background: {
-    flex: 1,
-    width: '100%',
-    height: '100%',
-  },
-  overlay: {
-    backgroundColor: '#36393c',
-    flex: 1,
-    opacity: 0.75,
-  },
-  content: {
-    position: 'absolute',
-    bottom: 0,
-    padding: Scale(20),
-    width: '100%',
-  },
-  title: {
-    fontFamily: Fonts.proximanova_bold,
-    color: Colors.White,
-    fontSize: Scale(28),
-    paddingBottom: Scale(20),
-  },
-  listContainer: {
-    backgroundColor: Colors.White,
-    borderRadius: Scale(10),
-    padding: Scale(10),
-    paddingHorizontal: Scale(18),
-  },
-  listItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    borderWidth: Scale(1),
-    borderRadius: Scale(10),
-    // margin: Scale(10),
-    marginVertical: Scale(10),
-    borderColor: Colors.Grey100,
-    padding: Scale(8),
-    paddingHorizontal: Scale(15),
-  },
-  itemContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  itemIcon: {
-    height: Scale(25),
-    width: Scale(25),
-    marginRight: Scale(10),
-  },
-  itemText: {
-    fontSize: Scale(15),
-    color: Colors.Black,
-    fontFamily: Fonts.proximanova_regular,
-  },
-  radioIcon: {
-    height: Scale(25),
-    width: Scale(25),
-    marginLeft: Scale(10),
-  },
-});

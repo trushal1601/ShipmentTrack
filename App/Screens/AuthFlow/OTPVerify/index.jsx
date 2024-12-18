@@ -1,6 +1,7 @@
 import {
   Image,
   Pressable,
+  StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -13,7 +14,7 @@ import {Labels} from '../../../Assets/Labels';
 import {getImageSource} from '../../../Helper/ImageUri';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
-import {Button} from '../../../Components/Component';
+import {Button, Header} from '../../../Components/Component';
 import {
   CodeField,
   Cursor,
@@ -21,6 +22,7 @@ import {
   useClearByFocusCell,
 } from 'react-native-confirmation-code-field';
 import {useNavigation} from '@react-navigation/native';
+import OTPVerifyStyle from './OTPVerifyStyle';
 
 const OTPVerify = ({route, initialSeconds = 60}) => {
   const navigation = useNavigation();
@@ -59,6 +61,55 @@ const OTPVerify = ({route, initialSeconds = 60}) => {
     setIsOtpExpired(false);
     // Add resend OTP logic here
   };
+  const backIcon = () => {
+    return (
+      <TouchableOpacity
+        onPress={() => navigation.goBack()}
+        style={OTPVerifyStyle.backIcon}>
+        <Image
+          source={getImageSource(Images.back_icon)}
+          style={OTPVerifyStyle.backImage}
+        />
+      </TouchableOpacity>
+    );
+  };
+
+  const Email = () => {
+    return (
+      <View style={OTPVerifyStyle.emailContainer}>
+        <Image source={Images.mail_icon} style={OTPVerifyStyle.mailIcon} />
+        <Text style={OTPVerifyStyle.emailText}>{email}</Text>
+      </View>
+    );
+  };
+
+  const OTPFill = () => {
+    return (
+      <CodeField
+        ref={ref}
+        {...props}
+        value={otp}
+        onChangeText={setOtp}
+        cellCount={CELL_COUNT}
+        rootStyle={OTPVerifyStyle.codeFieldRoot}
+        keyboardType="number-pad"
+        textContentType="oneTimeCode"
+        renderCell={({index, symbol, isFocused}) => (
+          <View
+            onLayout={getCellOnLayoutHandler(index)}
+            key={index}
+            style={[
+              OTPVerifyStyle.cell,
+              isFocused && OTPVerifyStyle.focusCell,
+            ]}>
+            <Text style={OTPVerifyStyle.cellText}>
+              {symbol || (isFocused ? <Cursor /> : null)}
+            </Text>
+          </View>
+        )}
+      />
+    );
+  };
 
   return (
     <Formik
@@ -68,95 +119,32 @@ const OTPVerify = ({route, initialSeconds = 60}) => {
         console.log(values);
       }}>
       {({handleChange, handleBlur, handleSubmit, values, errors, touched}) => (
-        <View style={{backgroundColor: Colors.White, flex: 1}}>
-          <TouchableOpacity
-            onPress={() => navigation.goBack()}
-            style={{
-              alignSelf: 'flex-start',
-              backgroundColor: Colors.White,
-            }}>
-            <Image
-              source={getImageSource(Images.back_icon)}
-              style={{
-                height: Scale(24),
-                width: Scale(24),
-                margin: Scale(15),
-              }}
-            />
-          </TouchableOpacity>
-          <View style={styles.innerContainer}>
-            <Text style={styles.headerText}>{Labels.otp}</Text>
-            <Text style={styles.bioText}>{Labels.otpBio}</Text>
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                gap: 10,
-                marginTop: 10,
-              }}>
-              <Image
-                source={Images.mail_icon}
-                style={{height: Scale(24), width: Scale(24)}}
-              />
-              <Text
-                style={{
-                  color: Colors.Grey400,
-                  fontFamily: Fonts.proximanova_regular,
-                }}>
-                {email}
-              </Text>
-            </View>
-            <CodeField
-              ref={ref}
-              {...props}
-              value={otp}
-              onChangeText={setOtp}
-              cellCount={CELL_COUNT}
-              rootStyle={styles.codeFieldRoot}
-              keyboardType="number-pad"
-              textContentType="oneTimeCode"
-              renderCell={({index, symbol, isFocused}) => (
-                <View
-                  onLayout={getCellOnLayoutHandler(index)}
-                  key={index}
-                  style={[styles.cell, isFocused && styles.focusCell]}>
-                  <Text style={styles.cellText}>
-                    {symbol || (isFocused ? <Cursor /> : null)}
-                  </Text>
-                </View>
-              )}
-            />
-            {touched.otp && errors.otp && (
-              <Text style={styles.errorText}>{errors.otp}</Text>
-            )}
+        <View style={OTPVerifyStyle.container}>
+          <StatusBar backgroundColor={Colors.White} barStyle={'dark-content'} />
+          {/* {backIcon()} */}
+          <Header />
 
+          <View style={OTPVerifyStyle.innerContainer}>
+            <Text style={OTPVerifyStyle.headerText}>{Labels.otp}</Text>
+            <Text style={OTPVerifyStyle.bioText}>{Labels.otpBio}</Text>
+            {Email()}
+            {OTPFill()}
+            {touched.otp && errors.otp && (
+              <Text style={OTPVerifyStyle.errorText}>{errors.otp}</Text>
+            )}
             {isOtpExpired ? (
-              <View style={{flexDirection: 'row', marginTop: Scale(10)}}>
-                <Text
-                  style={{
-                    color: Colors.Grey200,
-                    fontFamily: Fonts.proximanova_regular,
-                    marginRight: Scale(5),
-                  }}>
+              <View style={OTPVerifyStyle.expiredContainer}>
+                <Text style={OTPVerifyStyle.invalidOtpText}>
                   Entered OTP is invalid or expired.
                 </Text>
                 <Pressable onPress={handleResend}>
-                  <Text style={styles.resendText}>Resend</Text>
+                  <Text style={OTPVerifyStyle.resendText}>Resend</Text>
                 </Pressable>
               </View>
             ) : (
-              <Text
-                style={{
-                  color: Colors.Grey200,
-                  fontFamily: Fonts.proximanova_regular,
-                  marginTop: 15,
-                }}>
+              <Text style={OTPVerifyStyle.resendCountdown}>
                 Resend code in{' '}
-                <Text
-                  style={{
-                    color: Colors.Grey300,
-                    fontFamily: Fonts.proximanova_regular,
-                  }}>
+                <Text style={OTPVerifyStyle.resendTime}>
                   {formatTime(seconds)}
                 </Text>
               </Text>
@@ -165,7 +153,7 @@ const OTPVerify = ({route, initialSeconds = 60}) => {
               value={'Verify'}
               disabled={otp.length < CELL_COUNT || !!errors.otp}
               onPress={() => navigation.navigate('home')}
-              style={{marginTop: Scale(20)}}
+              style={OTPVerifyStyle.verifyButton}
             />
           </View>
         </View>
@@ -177,6 +165,10 @@ const OTPVerify = ({route, initialSeconds = 60}) => {
 export default OTPVerify;
 
 const styles = StyleSheet.create({
+  container: {
+    backgroundColor: Colors.White,
+    flex: 1,
+  },
   innerContainer: {
     paddingHorizontal: Scale(23),
   },
@@ -225,5 +217,49 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.proximanova_bold,
     textAlign: 'center',
     textDecorationLine: 'underline',
+  },
+  backIcon: {
+    alignSelf: 'flex-start',
+    backgroundColor: Colors.White,
+  },
+  backImage: {
+    height: Scale(24),
+    width: Scale(24),
+    margin: Scale(15),
+  },
+  emailContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    marginTop: 10,
+  },
+  mailIcon: {
+    height: Scale(24),
+    width: Scale(24),
+  },
+  emailText: {
+    color: Colors.Grey400,
+    fontFamily: Fonts.proximanova_regular,
+  },
+  expiredContainer: {
+    flexDirection: 'row',
+    marginTop: Scale(10),
+  },
+  invalidOtpText: {
+    color: Colors.Grey200,
+    fontFamily: Fonts.proximanova_regular,
+    marginRight: Scale(5),
+  },
+  resendCountdown: {
+    color: Colors.Grey200,
+    fontFamily: Fonts.proximanova_regular,
+    marginTop: 15,
+  },
+  resendTime: {
+    color: Colors.Grey300,
+    fontFamily: Fonts.proximanova_regular,
+  },
+  verifyButton: {
+    marginTop: Scale(20),
   },
 });
