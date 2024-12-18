@@ -14,7 +14,7 @@ export default StyleSheet.create({
   overlay: {
     backgroundColor: '#36393c',
     flex: 1,
-    opacity: 0.5,
+    opacity: 0.6,
   },
   content: {
     position: 'absolute',

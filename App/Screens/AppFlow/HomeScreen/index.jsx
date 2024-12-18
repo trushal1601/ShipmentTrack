@@ -1,17 +1,15 @@
+import React, {useEffect, useRef, useState} from 'react';
 import {
-  FlatList,
-  Image,
-  Modal,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
   View,
+  TouchableOpacity,
+  Text,
+  Image,
+  FlatList,
+  Alert,
+  BackHandler,
+  StatusBar,
 } from 'react-native';
-import React, {useState} from 'react';
+import RBSheet from 'react-native-raw-bottom-sheet';
 import {Colors, Fonts, Images} from '../../../Assets/Assets';
 import Scale from '../../../Helper/Responsive';
 import {Labels} from '../../../Assets/Labels';
@@ -19,11 +17,56 @@ import {CountryData, ShipmentData} from '../../../Helper/JsonData';
 import {Button} from '../../../Components/Component';
 import {getImageSource} from '../../../Helper/ImageUri';
 import HomeScreenStyle from './HomeScreenStyle';
+import {useNavigation} from '@react-navigation/native';
 
 const HomeScreen = () => {
+  const navigation = useNavigation();
   const [countryModalVisible, setCountryModalVisible] = useState(false);
   const [logoutModalVisible, setLogoutModalVisible] = useState(false);
   const [selectedItem, setSelectedItem] = useState(CountryData[0]?.id);
+
+  const refCountryRBSheet = useRef();
+  const refLogoutRBSheet = useRef();
+
+  useEffect(() => {
+    if (countryModalVisible) {
+      refCountryRBSheet.current.open();
+    } else {
+      refCountryRBSheet.current.close();
+    }
+  }, [countryModalVisible]);
+
+  useEffect(() => {
+    if (logoutModalVisible) {
+      refLogoutRBSheet.current.open();
+    } else {
+      refLogoutRBSheet.current.close();
+    }
+  }, [logoutModalVisible]);
+
+  useEffect(() => {
+    const backAction = () => {
+      Alert.alert('Hold on!', 'Are you sure you want to exit the App?', [
+        {
+          text: 'Cancel',
+          onPress: () => null,
+          style: 'cancel',
+        },
+        {
+          text: 'YES',
+          onPress: () => BackHandler.exitApp(),
+        },
+      ]);
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    return () => backHandler.remove();
+  }, []);
 
   const handlePress = item => {
     setSelectedItem(item.id);
@@ -34,13 +77,17 @@ const HomeScreen = () => {
         <Image source={Images.logo} style={HomeScreenStyle.logo} />
         <View style={HomeScreenStyle.headerRightContainer}>
           <TouchableOpacity onPress={() => setCountryModalVisible(true)}>
+            {/* {selectedItem.id === 0 ?  */}
             <Image source={Images.uk_icon} style={HomeScreenStyle.icon} />
+            {/* :
+          <Image source={Images.france_icon} style={HomeScreenStyle.icon} />
+          } */}
           </TouchableOpacity>
           <TouchableOpacity
             style={HomeScreenStyle.notificationButton}
-            onPress={() => console.log('Notification Pressed')}>
+            onPress={() => navigation.navigate('notification')}>
             <Image source={Images.notification} style={HomeScreenStyle.icon} />
-            <Text style={HomeScreenStyle.notificationText}>0</Text>
+            <Text style={HomeScreenStyle.notificationText}>1</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -67,10 +114,17 @@ const HomeScreen = () => {
                   <Text style={HomeScreenStyle.shipmentCount}>
                     {item.count}
                   </Text>
-                  <Image
-                    source={item.status}
-                    style={HomeScreenStyle.shipmentStatus}
-                  />
+                  <View
+                    style={{
+                      padding: Scale(8),
+                      backgroundColor: Colors.White,
+                      borderRadius: Scale(9),
+                    }}>
+                    <Image
+                      source={item.status}
+                      style={HomeScreenStyle.shipmentStatus}
+                    />
+                  </View>
                 </View>
                 <Text style={HomeScreenStyle.shipmentText}>{item.label}</Text>
               </View>
@@ -89,7 +143,7 @@ const HomeScreen = () => {
           contentContainerStyle={{paddingBottom: Scale(15)}}
           keyExtractor={item => item.id.toString()}
           renderItem={({item}) => (
-            <TouchableWithoutFeedback onPress={() => handlePress(item)}>
+            <TouchableOpacity onPress={() => handlePress(item)}>
               <View style={HomeScreenStyle.listItem}>
                 <View style={HomeScreenStyle.itemContent}>
                   <Image
@@ -105,7 +159,7 @@ const HomeScreen = () => {
                   style={HomeScreenStyle.radioIcon}
                 />
               </View>
-            </TouchableWithoutFeedback>
+            </TouchableOpacity>
           )}
         />
         <Button
@@ -118,25 +172,33 @@ const HomeScreen = () => {
   };
   const CountryModal = () => {
     return (
-      <Modal
-        animationType="none"
-        transparent={true}
-        visible={countryModalVisible}
-        style={{height: Scale(350)}}>
-        <TouchableOpacity
-          style={HomeScreenStyle.overlay}
-          onPress={() => setCountryModalVisible(false)}
-        />
+      <RBSheet
+        openDuration={250}
+        ref={refCountryRBSheet}
+        draggable={true}
+        draggableIcon={true}
+        height={Scale(300)}
+        dragFromTopOnly={true}
+        closeOnDragDown={true}
+        customStyles={{
+          container: {
+            backgroundColor: 'white',
+            borderTopRightRadius: Scale(19),
+            borderTopLeftRadius: Scale(19),
+          },
+          draggableIcon: {backgroundColor: Colors.Grey100, width: Scale(60)},
+        }}
+        onClose={() => setCountryModalVisible(false)}>
         <View style={HomeScreenStyle.content}>{Footer()}</View>
-      </Modal>
+      </RBSheet>
     );
   };
-  const logOut = () => {
+  const LogOut = () => {
     return (
       <TouchableOpacity
         style={HomeScreenStyle.logoutButton}
         onPress={() => {
-          setLogoutModalVisible(true), console.log('dfewf');
+          setLogoutModalVisible(true);
         }}>
         <Text style={HomeScreenStyle.logoutText}>{Labels.logout}</Text>
       </TouchableOpacity>
@@ -144,17 +206,73 @@ const HomeScreen = () => {
   };
   const LogOutModel = () => {
     return (
-      <Modal
-        animationType="none"
-        transparent={true}
-        visible={logoutModalVisible}
-        style={{height: Scale(350)}}>
-        <TouchableOpacity
-          style={HomeScreenStyle.overlay}
-          onPress={() => setLogoutModalVisible(false)}
-        />
-        {/* <View style={HomeScreenStyle.content}>{Footer()}</View> */}
-      </Modal>
+      <RBSheet
+        openDuration={250}
+        ref={refLogoutRBSheet}
+        draggable={true}
+        draggableIcon={true}
+        height={Scale(210)}
+        dragFromTopOnly={true}
+        closeOnDragDown={true}
+        customStyles={{
+          container: {
+            backgroundColor: 'white',
+            borderTopRightRadius: Scale(19),
+            borderTopLeftRadius: Scale(19),
+          },
+          draggableIcon: {backgroundColor: Colors.Grey100, width: Scale(60)},
+        }}
+        onClose={() => setLogoutModalVisible(false)}>
+        <View style={HomeScreenStyle.content}>
+          <View style={HomeScreenStyle.listContainer}>
+            <Text
+              style={{
+                textAlign: 'center',
+                color: Colors.Grey400,
+                fontFamily: Fonts.proximanova_bold,
+                fontSize: Scale(18),
+              }}>
+              {Labels.logout}
+            </Text>
+            <Text
+              style={{
+                textAlign: 'center',
+                color: Colors.Grey300,
+                fontFamily: Fonts.proximanova_regular,
+                fontSize: Scale(16),
+                marginTop: Scale(5),
+              }}>
+              {Labels.Are_you_sure_you_want_to_logout}
+            </Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                width: '100%',
+                gap: Scale(10),
+                marginTop: Scale(30),
+                marginBottom: Scale(25),
+              }}>
+              <Button
+                value={'Back'}
+                style={{
+                  borderColor: Colors.Primary,
+                  backgroundColor: Colors.White,
+                  borderWidth: 1,
+                  width: '50%',
+                }}
+                textStyle={{color: Colors.Primary}}
+                onPress={() => setLogoutModalVisible(false)}
+              />
+              <Button
+                value={'Yes, Logout'}
+                style={{width: '50%'}}
+                onPress={() => navigation.navigate('chooseLanguage')}
+              />
+            </View>
+          </View>
+        </View>
+      </RBSheet>
     );
   };
 
@@ -162,17 +280,17 @@ const HomeScreen = () => {
     <View style={{backgroundColor: Colors.White, flex: 1}}>
       <StatusBar
         backgroundColor={
-          countryModalVisible === true ? '#2A2C2FB3' : Colors.White
+          countryModalVisible || logoutModalVisible === true
+            ? '#36393C99'
+            : Colors.White
         }
         barStyle={'dark-content'}
       />
-      {logOut()}
+      {LogOut()}
       {Header()}
-      <ScrollView showsVerticalScrollIndicator={false}>
-        {HomeCard()}
-        {CountryModal()}
-        {LogOutModel()}
-      </ScrollView>
+      {HomeCard()}
+      {CountryModal()}
+      {LogOutModel()}
     </View>
   );
 };

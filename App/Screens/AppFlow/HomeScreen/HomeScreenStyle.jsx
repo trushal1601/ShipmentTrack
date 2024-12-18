@@ -6,7 +6,7 @@ export default StyleSheet.create({
   overlay: {
     backgroundColor: '#36393c',
     flex: 1,
-    opacity: 0.75,
+    opacity: 0.6,
   },
   content: {
     position: 'absolute',
@@ -22,8 +22,6 @@ export default StyleSheet.create({
   },
   listContainer: {
     backgroundColor: Colors.White,
-    borderTopRightRadius: Scale(15),
-    borderTopLeftRadius: Scale(15),
     padding: Scale(10),
     paddingHorizontal: Scale(25),
   },
@@ -126,11 +124,10 @@ export default StyleSheet.create({
     fontSize: Scale(24),
     fontFamily: Fonts.proximanova_bold,
     color: Colors.Grey300,
-    marginTop: Scale(10),
   },
   shipmentStatus: {
-    height: Scale(60),
-    width: Scale(60),
+    height: Scale(25),
+    width: Scale(25),
   },
   shipmentText: {
     fontSize: Scale(16),

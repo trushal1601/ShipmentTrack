@@ -2,15 +2,15 @@ import {Text, TouchableOpacity, StyleSheet, View, Image} from 'react-native';
 import {Colors, Fonts, Images} from '../Assets/Assets';
 import Scale from '../Helper/Responsive';
 import {useNavigation} from '@react-navigation/native';
-import { getImageSource } from '../Helper/ImageUri';
+import {getImageSource} from '../Helper/ImageUri';
 
-export const Button = ({value, onPress, style, disabled}) => {
+export const Button = ({value, onPress, style, textStyle, disabled}) => {
   return (
     <TouchableOpacity
       onPress={onPress}
       style={[styles.button, style, disabled && styles.buttonDisabled]}
       disabled={disabled}>
-      <Text style={[styles.text, disabled && styles.textDisabled]}>
+      <Text style={[styles.text, textStyle, disabled && styles.textDisabled]}>
         {value}
       </Text>
     </TouchableOpacity>
@@ -28,6 +28,7 @@ export const Header = ({header, headerVisible}) => {
           <Image
             source={getImageSource(Images.back_icon)}
             style={styles.backIcon}
+            tintColor={Colors.Black}
           />
         </TouchableOpacity>
         {/* {headerVisible ? ( */}
@@ -37,7 +38,6 @@ export const Header = ({header, headerVisible}) => {
         {/* ) : (
           <Text></Text>
         )} */}
-        <View style={{width: Scale(40)}}></View>
       </View>
     </View>
   );
@@ -68,7 +68,6 @@ const styles = StyleSheet.create({
   headerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
   },
   backIcon: {
     height: Scale(24),
@@ -76,8 +75,8 @@ const styles = StyleSheet.create({
     margin: Scale(15),
   },
   headerText: {
-    fontFamily: Fonts.proximanova_regular,
+    fontFamily: Fonts.proximanova_bold,
     color: Colors.Black,
-    fontSize: Scale(20),
+    fontSize: Scale(17),
   },
 });

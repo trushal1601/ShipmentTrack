@@ -15,4 +15,6 @@ export const Labels = {
   DelayedDeliveries: 'Delayed Deliveries',
   logout: 'Logout',
   Done: 'Done',
+  Are_you_sure_you_want_to_logout:'Are you sure you want to logout?',
+  Notification:'Notification'
 };

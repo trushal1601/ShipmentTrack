@@ -6,6 +6,7 @@ import ChooseLanguage from '../Screens/AuthFlow/ChooseLanguage';
 import Login from '../Screens/AuthFlow/Login';
 import OTPVerify from '../Screens/AuthFlow/OTPVerify';
 import TabNavigator from './TabNavigator';
+import Notification from '../Screens/AppFlow/Notification';
 
 const MainNavigator = () => {
   const Stack = createNativeStackNavigator();
@@ -17,6 +18,7 @@ const MainNavigator = () => {
         <Stack.Screen name="loginScreen" component={Login} />
         <Stack.Screen name="OTPVerify" component={OTPVerify} />
         <Stack.Screen name="home" component={TabNavigator} />
+        <Stack.Screen name="notification" component={Notification} />
       </Stack.Navigator>
     </NavigationContainer>
   );
