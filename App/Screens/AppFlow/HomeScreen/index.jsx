@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {
   View,
   TouchableOpacity,
@@ -14,10 +14,10 @@ import {Colors, Fonts, Images} from '../../../Assets/Assets';
 import Scale from '../../../Helper/Responsive';
 import {Labels} from '../../../Assets/Labels';
 import {CountryData, ShipmentData} from '../../../Helper/JsonData';
-import {Button} from '../../../Components/Component';
+import {ActionButton} from '../../../Components/Component';
 import {getImageSource} from '../../../Helper/ImageUri';
 import HomeScreenStyle from './HomeScreenStyle';
-import {useNavigation} from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 
 const HomeScreen = () => {
   const navigation = useNavigation();
@@ -44,29 +44,24 @@ const HomeScreen = () => {
     }
   }, [logoutModalVisible]);
 
-  useEffect(() => {
-    const backAction = () => {
-      Alert.alert('Hold on!', 'Are you sure you want to exit the App?', [
-        {
-          text: 'Cancel',
-          onPress: () => null,
-          style: 'cancel',
-        },
-        {
-          text: 'YES',
-          onPress: () => BackHandler.exitApp(),
-        },
-      ]);
-      return true;
-    };
+  useFocusEffect(
+    useCallback(() => {
+      const backAction = () => {
+        Alert.alert('Hold on!', 'Do you want to exit the app?', [
+          {text: 'Cancel', onPress: () => null, style: 'cancel'},
+          {text: 'YES', onPress: () => BackHandler.exitApp()},
+        ]);
+        return true;
+      };
 
-    const backHandler = BackHandler.addEventListener(
-      'hardwareBackPress',
-      backAction,
-    );
+      const backHandler = BackHandler.addEventListener(
+        'hardwareBackPress',
+        backAction,
+      );
 
-    return () => backHandler.remove();
-  }, []);
+      return () => backHandler.remove();
+    }, []),
+  );
 
   const handlePress = item => {
     setSelectedItem(item.id);
@@ -162,7 +157,7 @@ const HomeScreen = () => {
             </TouchableOpacity>
           )}
         />
-        <Button
+        <ActionButton
           value={Labels.Done}
           style={{marginBottom: 25}}
           onPress={() => setCountryModalVisible(false)}
@@ -253,7 +248,7 @@ const HomeScreen = () => {
                 marginTop: Scale(30),
                 marginBottom: Scale(25),
               }}>
-              <Button
+              <ActionButton
                 value={'Back'}
                 style={{
                   borderColor: Colors.Primary,
@@ -264,7 +259,7 @@ const HomeScreen = () => {
                 textStyle={{color: Colors.Primary}}
                 onPress={() => setLogoutModalVisible(false)}
               />
-              <Button
+              <ActionButton
                 value={'Yes, Logout'}
                 style={{width: '50%'}}
                 onPress={() => navigation.navigate('chooseLanguage')}

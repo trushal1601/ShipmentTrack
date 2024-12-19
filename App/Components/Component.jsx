@@ -4,7 +4,7 @@ import Scale from '../Helper/Responsive';
 import {useNavigation} from '@react-navigation/native';
 import {getImageSource} from '../Helper/ImageUri';
 
-export const Button = ({value, onPress, style, textStyle, disabled}) => {
+export const ActionButton = ({value, onPress, style, textStyle, disabled}) => {
   return (
     <TouchableOpacity
       onPress={onPress}
@@ -20,25 +20,21 @@ export const Button = ({value, onPress, style, textStyle, disabled}) => {
 export const Header = ({header, headerVisible}) => {
   const navigation = useNavigation();
   return (
-    <View>
-      <View style={styles.headerContainer}>
-        <TouchableOpacity
-          onPress={() => navigation.goBack()}
-          style={{alignSelf: 'flex-start'}}>
-          <Image
-            source={getImageSource(Images.back_icon)}
-            style={styles.backIcon}
-            tintColor={Colors.Black}
-          />
-        </TouchableOpacity>
-        {/* {headerVisible ? ( */}
-        <Text style={styles.headerText} numberOfLines={1}>
-          {header}
-        </Text>
-        {/* ) : (
-          <Text></Text>
-        )} */}
-      </View>
+    <View style={styles.headerContainer}>
+      <TouchableOpacity
+        onPress={() => navigation.goBack()}
+        style={{alignSelf: 'flex-start'}}>
+        {/* <View style={{backgroundColor: 'green',height:Scale(40),width:Scale(40)}}> */}
+        <Image
+          source={getImageSource(Images.back_icon)}
+          style={styles.backIcon}
+          tintColor={Colors.Black}
+        />
+        {/* </View> */}
+      </TouchableOpacity>
+      <Text style={styles.headerText} numberOfLines={1}>
+        {header}
+      </Text>
     </View>
   );
 };
@@ -68,15 +64,19 @@ const styles = StyleSheet.create({
   headerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    paddingHorizontal: Scale(12),
+    // backgroundColor: 'red',
   },
   backIcon: {
-    height: Scale(24),
-    width: Scale(24),
-    margin: Scale(15),
+    height: Scale(22),
+    width: Scale(22),
+    margin: Scale(10),
+    // backgroundColor: 'red',
   },
   headerText: {
     fontFamily: Fonts.proximanova_bold,
     color: Colors.Black,
-    fontSize: Scale(17),
+    fontSize: Scale(16),
+    // backgroundColor: 'red',
   },
 });

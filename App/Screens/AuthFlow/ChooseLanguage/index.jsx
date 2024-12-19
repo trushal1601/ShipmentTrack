@@ -13,7 +13,7 @@ import {getImageSource} from '../../../Helper/ImageUri';
 import {Colors, Fonts, Images} from '../../../Assets/Assets';
 import Scale from '../../../Helper/Responsive';
 import {CountryData} from '../../../Helper/JsonData';
-import {Button} from '../../../Components/Component';
+import {ActionButton} from '../../../Components/Component';
 import {Labels} from '../../../Assets/Labels';
 import {useNavigation} from '@react-navigation/native';
 import ChooseLanguageStyle from './ChooseLanguageStyle';
@@ -53,7 +53,7 @@ const ChooseLanguage = () => {
             </TouchableWithoutFeedback>
           )}
         />
-        <Button
+        <ActionButton
           value={Labels.continue}
           onPress={() => navigation.navigate('loginScreen')}
         />

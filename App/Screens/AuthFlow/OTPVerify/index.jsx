@@ -14,7 +14,7 @@ import {Labels} from '../../../Assets/Labels';
 import {getImageSource} from '../../../Helper/ImageUri';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
-import {Button, Header} from '../../../Components/Component';
+import {ActionButton, Header} from '../../../Components/Component';
 import {
   CodeField,
   Cursor,
@@ -61,19 +61,6 @@ const OTPVerify = ({route, initialSeconds = 60}) => {
     setIsOtpExpired(false);
     // Add resend OTP logic here
   };
-  const backIcon = () => {
-    return (
-      <TouchableOpacity
-        onPress={() => navigation.goBack()}
-        style={OTPVerifyStyle.backIcon}>
-        <Image
-          source={getImageSource(Images.back_icon)}
-          style={OTPVerifyStyle.backImage}
-        />
-      </TouchableOpacity>
-    );
-  };
-
   const Email = () => {
     return (
       <View style={OTPVerifyStyle.emailContainer}>
@@ -149,7 +136,7 @@ const OTPVerify = ({route, initialSeconds = 60}) => {
                 </Text>
               </Text>
             )}
-            <Button
+            <ActionButton
               value={'Verify'}
               disabled={otp.length < CELL_COUNT || !!errors.otp}
               onPress={() => navigation.navigate('home')}

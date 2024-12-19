@@ -2,11 +2,14 @@ export const Colors = {
   Primary: '#BE1F2D',
   Black: '#1F1F1F',
   White: '#FFF',
+  Grey50: '#E6E6E6',
   Grey100: '#D8D8D8',
   Grey200: '#7A8183',
   Grey300: '#262A2A',
   Grey400: '#0F1313',
   Green: '#38C1A9',
+  contentBg: '#D8D8D826',
+  imgBg: '#7A818326',
 };
 
 export const Fonts = {
@@ -32,4 +35,8 @@ export const Images = {
   icon2: require('../Assets/Images/icon2.png'),
   icon3: require('../Assets/Images/icon3.png'),
   icon4: require('../Assets/Images/icon4.png'),
+  calendar: require('../Assets/Images/calendar.png'),
+  clock: require('../Assets/Images/clock.png'),
+  red_round: require('../Assets/Images/round.png'),
+  downArrow: require('../Assets/Images/downarrow.png'),
 };

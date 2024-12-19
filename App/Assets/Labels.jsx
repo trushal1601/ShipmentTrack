@@ -15,6 +15,21 @@ export const Labels = {
   DelayedDeliveries: 'Delayed Deliveries',
   logout: 'Logout',
   Done: 'Done',
-  Are_you_sure_you_want_to_logout:'Are you sure you want to logout?',
-  Notification:'Notification'
+  Are_you_sure_you_want_to_logout: 'Are you sure you want to logout?',
+  Notification: 'Notification',
+  My_Delivery: 'My Delivery',
+  Regular: 'Regular',
+  Urgent: 'Urgent',
+  Shipment_Type: 'Shipment Type',
+  PickUp_Date: 'Pick-Up Date',
+  PickUp_Time: 'Pick-Up Time',
+  View_Details: 'View Details',
+  Shipment_Details: 'Shipment Details',
+  AgentID: 'Agent ID',
+  ShipmentID: 'Shipment ID',
+  Total_Charges: 'Total Charges',
+  Shipment_Information: 'Shipment Information',
+  PickUp_Location: 'Pick-Up Location',
+  Drop_Location: 'Drop Location',
+  Shipment_Status:'Shipment Status'
 };

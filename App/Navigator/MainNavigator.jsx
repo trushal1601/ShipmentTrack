@@ -7,6 +7,7 @@ import Login from '../Screens/AuthFlow/Login';
 import OTPVerify from '../Screens/AuthFlow/OTPVerify';
 import TabNavigator from './TabNavigator';
 import Notification from '../Screens/AppFlow/Notification';
+import DeliveryDetails from '../Screens/AppFlow/DeliveryDetails';
 
 const MainNavigator = () => {
   const Stack = createNativeStackNavigator();
@@ -19,6 +20,7 @@ const MainNavigator = () => {
         <Stack.Screen name="OTPVerify" component={OTPVerify} />
         <Stack.Screen name="home" component={TabNavigator} />
         <Stack.Screen name="notification" component={Notification} />
+        <Stack.Screen name="deliveryDetails" component={DeliveryDetails} />
       </Stack.Navigator>
     </NavigationContainer>
   );

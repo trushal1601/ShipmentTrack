@@ -2,7 +2,7 @@ import {StatusBar, StyleSheet, Text, TextInput, View} from 'react-native';
 import React from 'react';
 import {Colors, Fonts} from '../../../Assets/Assets';
 import {Labels} from '../../../Assets/Labels';
-import {Button} from '../../../Components/Component';
+import {ActionButton} from '../../../Components/Component';
 import Scale from '../../../Helper/Responsive';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
@@ -53,7 +53,7 @@ const Login = ({navigation}) => {
               You will receive an OTP to verify this email id.
             </Text>
             <View style={LoginStyle.buttonContainer}>
-              <Button
+              <ActionButton
                 value={'Login'}
                 onPress={handleSubmit}
                 disabled={!values.email || !!errors.email}
