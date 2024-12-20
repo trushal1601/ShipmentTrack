@@ -14,7 +14,7 @@ export default StyleSheet.create({
   overlay: {
     backgroundColor: '#36393c',
     flex: 1,
-    opacity: 0.6,
+    opacity: 0.7,
   },
   content: {
     position: 'absolute',
@@ -48,8 +48,8 @@ export default StyleSheet.create({
     alignItems: 'center',
   },
   itemIcon: {
-    height: Scale(30),
-    width: Scale(30),
+    height: Scale(25),
+    width: Scale(25),
     marginRight: Scale(10),
   },
   itemText: {

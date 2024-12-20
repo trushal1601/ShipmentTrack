@@ -284,7 +284,8 @@ const HomeScreen = () => {
   };
 
   return (
-    <View style={{backgroundColor: Colors.White, flex: 1}}>
+    <View
+      style={{backgroundColor: Colors.White, flex: 1, marginTop: Scale(20)}}>
       <StatusBar
         backgroundColor={
           countryModalVisible || logoutModalVisible === true

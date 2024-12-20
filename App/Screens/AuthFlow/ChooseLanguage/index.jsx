@@ -3,12 +3,11 @@ import {
   Image,
   ImageBackground,
   StatusBar,
-  StyleSheet,
   Text,
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {getImageSource} from '../../../Helper/ImageUri';
 import {Colors, Fonts, Images} from '../../../Assets/Assets';
 import Scale from '../../../Helper/Responsive';
@@ -22,6 +21,16 @@ const ChooseLanguage = () => {
   const navigation = useNavigation();
   const [selectedItem, setSelectedItem] = useState(CountryData[0]?.id);
 
+  useEffect(() => {
+    StatusBar.setBarStyle('dark-content');
+    StatusBar.setBackgroundColor('transparent');
+    StatusBar.setTranslucent(true);
+    return () => {
+      StatusBar.setBarStyle('default');
+      StatusBar.setBackgroundColor(Colors.White);
+      StatusBar.setTranslucent(false);
+    };
+  }, []);
   const handlePress = item => {
     setSelectedItem(item.id);
   };
@@ -62,6 +71,11 @@ const ChooseLanguage = () => {
 
   return (
     <View style={ChooseLanguageStyle.container}>
+      <StatusBar
+        translucent
+        backgroundColor="transparent"
+        barStyle={'dark-content'}
+      />
       <ImageBackground
         source={getImageSource(Images.bg_img)}
         resizeMode="cover"
