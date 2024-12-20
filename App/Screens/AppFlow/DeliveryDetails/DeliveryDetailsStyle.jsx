@@ -92,7 +92,7 @@ export default StyleSheet.create({
     borderRadius: Scale(5),
     alignSelf: 'flex-start',
   },
-  icon: {height: Scale(18), width: Scale(18)},
+  icon: {height: Scale(15), width: Scale(15)},
   pickUpText: {
     color: Colors.Black,
     fontFamily: Fonts.proximanova_bold,

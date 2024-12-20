@@ -14,6 +14,7 @@ const MainNavigator = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
+        initialRouteName="chooseLanguage"
         screenOptions={{headerShown: false, animation: 'slide_from_right'}}>
         <Stack.Screen name="chooseLanguage" component={ChooseLanguage} />
         <Stack.Screen name="loginScreen" component={Login} />

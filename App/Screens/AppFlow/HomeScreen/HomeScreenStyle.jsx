@@ -18,7 +18,7 @@ export default StyleSheet.create({
     color: Colors.Black,
     fontSize: Scale(18),
     paddingBottom: Scale(10),
-    marginTop: 20,
+    marginTop: Scale(20),
   },
   listContainer: {
     backgroundColor: Colors.White,
@@ -34,7 +34,7 @@ export default StyleSheet.create({
     // margin: Scale(10),
     marginVertical: Scale(10),
     borderColor: Colors.Grey100,
-    padding: Scale(8),
+    padding: Scale(10),
     paddingHorizontal: Scale(15),
   },
   itemContent: {

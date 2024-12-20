@@ -11,6 +11,10 @@ import LoginStyle from './LoginStyle';
 const Login = ({navigation}) => {
   const validationSchema = Yup.object().shape({
     email: Yup.string()
+      .matches(
+        /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+        'Please enter a valid email address',
+      )
       .email('Invalid email format')
       .required('Email is required'),
   });

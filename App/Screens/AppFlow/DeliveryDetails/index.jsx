@@ -1,6 +1,7 @@
 import {
   FlatList,
   Image,
+  Keyboard,
   ScrollView,
   Text,
   TextInput,
@@ -25,13 +26,39 @@ const DeliveryDetails = ({route}) => {
   const [showStatus, setShowStatus] = useState(false);
   const [statusModalVisible, setStatusModalVisible] = useState(false);
   const [rejectModalVisible, setRejectModalVisible] = useState(false);
+  const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
+  const [selectedStatus, setSelectedStatus] = useState(null);
   const refStatusRBSheet = useRef();
   const refRejectRBSheet = useRef();
   const {data} = route.params;
   console.log('data', data);
 
+  useEffect(() => {
+    const showSubscription = Keyboard.addListener('keyboardDidShow', () => {
+      setIsKeyboardVisible(true);
+    });
+    const hideSubscription = Keyboard.addListener('keyboardDidHide', () => {
+      setIsKeyboardVisible(false);
+    });
+
+    return () => {
+      showSubscription.remove();
+      hideSubscription.remove();
+    };
+  }, []);
+
   const handlePress = item => {
     setSelectedItem(item.id);
+  };
+  const handlePressDone = () => {
+    const selectedStatus = DeliveryStatus.find(
+      status => status.id === selectedItem,
+    );
+    const newStatus = selectedStatus
+      ? selectedStatus.status
+      : 'Please select status';
+    setSelectedStatus(newStatus);
+    setStatusModalVisible(false);
   };
 
   useEffect(() => {
@@ -117,7 +144,11 @@ const DeliveryDetails = ({route}) => {
       <View style={DeliveryDetailsStyle.shipInfo1}>
         <View style={DeliveryDetailsStyle.pickDateSection}>
           <View style={DeliveryDetailsStyle.imgSec}>
-            <Image source={Images.calendar} style={DeliveryDetailsStyle.icon} />
+            <Image
+              source={Images.calendar}
+              style={DeliveryDetailsStyle.icon}
+              tintColor={'#666666'}
+            />
           </View>
           <View>
             <Text style={DeliveryDetailsStyle.pickUpText}>
@@ -130,7 +161,11 @@ const DeliveryDetails = ({route}) => {
         </View>
         <View style={DeliveryDetailsStyle.pickDateSection}>
           <View style={DeliveryDetailsStyle.imgSec}>
-            <Image source={Images.clock} style={DeliveryDetailsStyle.icon} />
+            <Image
+              source={Images.clock}
+              style={DeliveryDetailsStyle.icon}
+              tintColor={'#666666'}
+            />
           </View>
           <View>
             <Text style={DeliveryDetailsStyle.pickUpText}>
@@ -199,8 +234,9 @@ const DeliveryDetails = ({route}) => {
               onPress={() => setStatusModalVisible(true)}
               style={DeliveryDetailsStyle.statusView}>
               <Text style={DeliveryDetailsStyle.status}>
-                {DeliveryStatus.find(status => status.id === selectedItem)
-                  ?.status || 'Please select status'}{' '}
+                {selectedStatus === null
+                  ? 'Please select status'
+                  : selectedStatus}
               </Text>
               <Image
                 source={Images.downArrow}
@@ -232,7 +268,9 @@ const DeliveryDetails = ({route}) => {
           },
           draggableIcon: {backgroundColor: Colors.Grey100, width: Scale(60)},
         }}
-        onClose={() => setStatusModalVisible(false)}>
+        onClose={() => {
+          setStatusModalVisible(false);
+        }}>
         <View style={DeliveryDetailsStyle.shipmentStatusView}>
           <FlatList
             data={DeliveryStatus}
@@ -259,7 +297,7 @@ const DeliveryDetails = ({route}) => {
           <ActionButton
             value={'Done'}
             style={{marginHorizontal: Scale(10), marginTop: Scale(15)}}
-            onPress={() => setStatusModalVisible(false)}
+            onPress={handlePressDone}
           />
         </View>
       </RBSheet>
@@ -341,34 +379,35 @@ const DeliveryDetails = ({route}) => {
           {RejectModel()}
         </View>
       </ScrollView>
-      {showStatus === true ? (
-        <ActionButton
-          value={'Update'}
-          disabled={!selectedItem}
-          style={{marginHorizontal: Scale(20), marginBottom: Scale(10)}}
-          onPress={() => console.log('Status updated')}
-        />
-      ) : (
-        <View style={DeliveryDetailsStyle.bottomButton}>
+      {!isKeyboardVisible &&
+        (showStatus ? (
           <ActionButton
-            value={'Reject'}
-            style={{
-              borderColor: Colors.Primary,
-              backgroundColor: Colors.White,
-              borderWidth: 1,
-              width: '50%',
-            }}
-            onPress={() => setRejectModalVisible(true)}
-            textStyle={{color: Colors.Primary}}
+            value={'Update'}
+            disabled={!selectedStatus}
+            style={{marginHorizontal: Scale(20), marginBottom: Scale(10)}}
+            onPress={() => navigation.navigate('myDelivery')}
           />
-          <ActionButton
-            value={'Accept'}
-            style={{width: '50%'}}
-            disabled={agentId.length !== 12}
-            onPress={() => setShowStatus(true)}
-          />
-        </View>
-      )}
+        ) : (
+          <View style={DeliveryDetailsStyle.bottomButton}>
+            <ActionButton
+              value={'Reject'}
+              style={{
+                borderColor: Colors.Primary,
+                backgroundColor: Colors.White,
+                borderWidth: 1,
+                width: '50%',
+              }}
+              onPress={() => setRejectModalVisible(true)}
+              textStyle={{color: Colors.Primary}}
+            />
+            <ActionButton
+              value={'Accept'}
+              style={{width: '50%'}}
+              disabled={agentId.length !== 12}
+              onPress={() => setShowStatus(true)}
+            />
+          </View>
+        ))}
     </View>
   );
 };

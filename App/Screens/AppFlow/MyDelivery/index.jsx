@@ -51,6 +51,7 @@ const MyDelivery = () => {
                     <Image
                       source={Images.calendar}
                       style={MyDeliveryStyle.icon}
+                      tintColor={'#666666'}
                     />
                   </View>
                   <View>
@@ -64,7 +65,11 @@ const MyDelivery = () => {
                 </View>
                 <View style={MyDeliveryStyle.itemDetail}>
                   <View style={MyDeliveryStyle.iconContainer}>
-                    <Image source={Images.clock} style={MyDeliveryStyle.icon} />
+                    <Image
+                      source={Images.clock}
+                      style={MyDeliveryStyle.icon}
+                      tintColor={'#666666'}
+                    />
                   </View>
                   <View>
                     <Text style={MyDeliveryStyle.detailHeader}>
@@ -78,9 +83,11 @@ const MyDelivery = () => {
               </View>
               <TouchableOpacity
                 style={MyDeliveryStyle.viewDetailsButton}
-                onPress={() => navigation.navigate('deliveryDetails',{
-                  data:item
-                })}>
+                onPress={() =>
+                  navigation.navigate('deliveryDetails', {
+                    data: item,
+                  })
+                }>
                 <Text style={MyDeliveryStyle.viewDetailsText}>
                   {Labels.View_Details}
                 </Text>

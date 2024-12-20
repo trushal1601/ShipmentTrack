@@ -72,8 +72,8 @@ export default StyleSheet.create({
       marginTop: 10,
     },
     mailIcon: {
-      height: Scale(24),
-      width: Scale(24),
+      height: Scale(20),
+      width: Scale(20),
     },
     emailText: {
       color: Colors.Grey400,

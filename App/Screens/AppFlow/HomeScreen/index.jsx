@@ -24,7 +24,12 @@ const HomeScreen = () => {
   const [countryModalVisible, setCountryModalVisible] = useState(false);
   const [logoutModalVisible, setLogoutModalVisible] = useState(false);
   const [selectedItem, setSelectedItem] = useState(CountryData[0]?.id);
-
+  const [selectedImage, setSelectedImage] = useState(
+    getImageSource(
+      CountryData.find(status => status.id === CountryData[0]?.id)?.icon ||
+        Images.uk_icon,
+    ),
+  );
   const refCountryRBSheet = useRef();
   const refLogoutRBSheet = useRef();
 
@@ -66,17 +71,24 @@ const HomeScreen = () => {
   const handlePress = item => {
     setSelectedItem(item.id);
   };
+  const handlePressDone = () => {
+    const selectedCountry = CountryData.find(
+      status => status.id === selectedItem,
+    );
+    const newImage = selectedCountry
+      ? getImageSource(selectedCountry.icon)
+      : Images.uk_icon;
+    setSelectedImage(newImage);
+    setCountryModalVisible(false);
+  };
+
   const Header = () => {
     return (
       <View style={HomeScreenStyle.headerContainer}>
         <Image source={Images.logo} style={HomeScreenStyle.logo} />
         <View style={HomeScreenStyle.headerRightContainer}>
           <TouchableOpacity onPress={() => setCountryModalVisible(true)}>
-            {/* {selectedItem.id === 0 ?  */}
-            <Image source={Images.uk_icon} style={HomeScreenStyle.icon} />
-            {/* :
-          <Image source={Images.france_icon} style={HomeScreenStyle.icon} />
-          } */}
+            <Image source={selectedImage} style={HomeScreenStyle.icon} />
           </TouchableOpacity>
           <TouchableOpacity
             style={HomeScreenStyle.notificationButton}
@@ -160,7 +172,7 @@ const HomeScreen = () => {
         <ActionButton
           value={Labels.Done}
           style={{marginBottom: 25}}
-          onPress={() => setCountryModalVisible(false)}
+          onPress={handlePressDone}
         />
       </View>
     );
@@ -172,7 +184,7 @@ const HomeScreen = () => {
         ref={refCountryRBSheet}
         draggable={true}
         draggableIcon={true}
-        height={Scale(300)}
+        height={Scale(310)}
         dragFromTopOnly={true}
         closeOnDragDown={true}
         customStyles={{

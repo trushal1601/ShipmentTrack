@@ -68,8 +68,8 @@ const styles = StyleSheet.create({
     // backgroundColor: 'red',
   },
   backIcon: {
-    height: Scale(22),
-    width: Scale(22),
+    height: Scale(15),
+    width: Scale(15),
     margin: Scale(10),
     // backgroundColor: 'red',
   },

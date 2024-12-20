@@ -37,13 +37,13 @@ const TabNavigator = () => {
               <View>
                 {focused ? (
                   <Image
-                    source={require('../Assets/Images/home.png')}
+                    source={require('../Assets/Images/homeo.png')}
                     style={{height: 24, width: 24}}
                     tintColor={Colors.Primary}
                   />
                 ) : (
                   <Image
-                    source={require('../Assets/Images/home.png')}
+                    source={require('../Assets/Images/homeo.png')}
                     style={{height: 24, width: 24}}
                     tintColor={Colors.Grey200}
                   />
@@ -78,13 +78,13 @@ const TabNavigator = () => {
               <View>
                 {focused ? (
                   <Image
-                    source={require('../Assets/Images/delivery.png')}
+                    source={require('../Assets/Images/parcel.png')}
                     style={{height: 24, width: 26}}
                     tintColor={Colors.Primary}
                   />
                 ) : (
                   <Image
-                    source={require('../Assets/Images/delivery.png')}
+                    source={require('../Assets/Images/parcel.png')}
                     style={{height: 24, width: 24}}
                     tintColor={Colors.Grey200}
                   />

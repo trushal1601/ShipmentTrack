@@ -56,8 +56,8 @@ export default StyleSheet.create({
     borderRadius: Scale(5),
   },
   icon: {
-    height: Scale(18),
-    width: Scale(18),
+    height: Scale(15),
+    width: Scale(15),
   },
   detailHeader: {
     fontFamily: Fonts.proximanova_bold,

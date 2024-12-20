@@ -48,8 +48,8 @@ export default StyleSheet.create({
     alignItems: 'center',
   },
   itemIcon: {
-    height: Scale(35),
-    width: Scale(35),
+    height: Scale(30),
+    width: Scale(30),
     marginRight: Scale(10),
   },
   itemText: {
