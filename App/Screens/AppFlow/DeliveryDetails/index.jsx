@@ -1,19 +1,54 @@
-import {Image, ScrollView, Text, TextInput, View} from 'react-native';
-import React, {useRef, useState} from 'react';
+import {
+  FlatList,
+  Image,
+  ScrollView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
+import React, {useEffect, useRef, useState} from 'react';
 import {Colors, Fonts, Images} from '../../../Assets/Assets';
 import {ActionButton, Header} from '../../../Components/Component';
 import {Labels} from '../../../Assets/Labels';
 import Scale from '../../../Helper/Responsive';
 import DeliveryDetailsStyle from './DeliveryDetailsStyle';
 import RBSheet from 'react-native-raw-bottom-sheet';
+import {DeliveryStatus} from '../../../Helper/JsonData';
+import {useNavigation} from '@react-navigation/native';
 
 const DeliveryDetails = ({route}) => {
+  const navigation = useNavigation();
   const [agentId, setAgentId] = useState('');
+  const [selectedItem, setSelectedItem] = useState(null);
   const [showStatus, setShowStatus] = useState(false);
   const [statusModalVisible, setStatusModalVisible] = useState(false);
+  const [rejectModalVisible, setRejectModalVisible] = useState(false);
   const refStatusRBSheet = useRef();
+  const refRejectRBSheet = useRef();
   const {data} = route.params;
   console.log('data', data);
+
+  const handlePress = item => {
+    setSelectedItem(item.id);
+  };
+
+  useEffect(() => {
+    if (statusModalVisible) {
+      refStatusRBSheet.current.open();
+    } else {
+      refStatusRBSheet.current.close();
+    }
+  }, [statusModalVisible]);
+
+  useEffect(() => {
+    if (rejectModalVisible) {
+      refRejectRBSheet.current.open();
+    } else {
+      refRejectRBSheet.current.close();
+    }
+  }, [rejectModalVisible]);
 
   const ShipmentType = () => {
     return (
@@ -157,39 +192,21 @@ const DeliveryDetails = ({route}) => {
         </View>
         {showStatus === true ? (
           <View style={{marginTop: Scale(15)}}>
-            <Text
-              style={{
-                color: Colors.Grey300,
-                fontFamily: Fonts.proximanova_regular,
-                fontSize: Scale(14),
-              }}>
+            <Text style={DeliveryDetailsStyle.statusText}>
               {Labels.Shipment_Status}
             </Text>
-            <View
-              style={{
-                backgroundColor: Colors.White,
-                paddingVertical: Scale(5),
-                borderRadius: Scale(8),
-                marginTop: Scale(8),
-                borderWidth: Scale(0.5),
-                borderColor: Colors.Grey100,
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                paddingHorizontal: Scale(10),
-              }}>
-              <Text
-                style={{
-                  fontSize: Scale(16),
-                  fontFamily: Fonts.proximanova_regular,
-                }}>
-                Please select status
+            <TouchableOpacity
+              onPress={() => setStatusModalVisible(true)}
+              style={DeliveryDetailsStyle.statusView}>
+              <Text style={DeliveryDetailsStyle.status}>
+                {DeliveryStatus.find(status => status.id === selectedItem)
+                  ?.status || 'Please select status'}{' '}
               </Text>
               <Image
                 source={Images.downArrow}
                 style={{height: Scale(24), width: Scale(24)}}
               />
-            </View>
+            </TouchableOpacity>
           </View>
         ) : (
           <View></View>
@@ -197,7 +214,6 @@ const DeliveryDetails = ({route}) => {
       </View>
     );
   };
-
   const StatusModel = () => {
     return (
       <RBSheet
@@ -217,8 +233,90 @@ const DeliveryDetails = ({route}) => {
           draggableIcon: {backgroundColor: Colors.Grey100, width: Scale(60)},
         }}
         onClose={() => setStatusModalVisible(false)}>
-        <View style={HomeScreenStyle.content}>
-          <Text>fjkae</Text>
+        <View style={DeliveryDetailsStyle.shipmentStatusView}>
+          <FlatList
+            data={DeliveryStatus}
+            renderItem={({item}) => {
+              return (
+                <TouchableWithoutFeedback onPress={() => handlePress(item)}>
+                  <View style={DeliveryDetailsStyle.statusModel}>
+                    <Image
+                      source={
+                        selectedItem === item.id
+                          ? Images.Selcted
+                          : Images.UnSelcted
+                      }
+                      style={DeliveryDetailsStyle.statusModelImg}
+                    />
+                    <Text style={DeliveryDetailsStyle.statusModelText}>
+                      {item.status}
+                    </Text>
+                  </View>
+                </TouchableWithoutFeedback>
+              );
+            }}
+          />
+          <ActionButton
+            value={'Done'}
+            style={{marginHorizontal: Scale(10), marginTop: Scale(15)}}
+            onPress={() => setStatusModalVisible(false)}
+          />
+        </View>
+      </RBSheet>
+    );
+  };
+  const RejectModel = () => {
+    return (
+      <RBSheet
+        openDuration={250}
+        ref={refRejectRBSheet}
+        draggable={true}
+        draggableIcon={true}
+        height={Scale(300)}
+        dragFromTopOnly={true}
+        closeOnDragDown={true}
+        customStyles={{
+          container: {
+            backgroundColor: 'white',
+            borderTopRightRadius: Scale(19),
+            borderTopLeftRadius: Scale(19),
+          },
+          draggableIcon: {backgroundColor: Colors.Grey100, width: Scale(60)},
+        }}
+        onClose={() => setRejectModalVisible(false)}>
+        <View style={DeliveryDetailsStyle.rejectView}>
+          <View style={DeliveryDetailsStyle.rejectHeaderView}>
+            <Image
+              source={Images.danger}
+              style={DeliveryDetailsStyle.rejectImg}
+            />
+            <Text style={DeliveryDetailsStyle.rejectLabel}>
+              {Labels.Reject_Shipment_Delivery}
+            </Text>
+            <Text style={DeliveryDetailsStyle.rejectBio}>
+              Are you sure you want to reject this shipment delivery? Confirm
+              your decision to ensure precise and efficient shipment tracking
+              management.
+            </Text>
+          </View>
+          <View style={DeliveryDetailsStyle.rejectButtonView}>
+            <ActionButton
+              value={'Cancel'}
+              style={{
+                borderColor: Colors.Primary,
+                backgroundColor: Colors.White,
+                borderWidth: 1,
+                width: '50%',
+              }}
+              textStyle={{color: Colors.Primary}}
+              onPress={() => setRejectModalVisible(false)}
+            />
+            <ActionButton
+              value={'Yes'}
+              style={{width: '50%'}}
+              onPress={() => navigation.navigate('myDelivery')}
+            />
+          </View>
         </View>
       </RBSheet>
     );
@@ -239,13 +337,16 @@ const DeliveryDetails = ({route}) => {
             {Labels.Shipment_Information}
           </Text>
           {ShipmentInfo()}
+          {StatusModel()}
+          {RejectModel()}
         </View>
       </ScrollView>
       {showStatus === true ? (
         <ActionButton
           value={'Update'}
-          disabled
+          disabled={!selectedItem}
           style={{marginHorizontal: Scale(20), marginBottom: Scale(10)}}
+          onPress={() => console.log('Status updated')}
         />
       ) : (
         <View style={DeliveryDetailsStyle.bottomButton}>
@@ -257,6 +358,7 @@ const DeliveryDetails = ({route}) => {
               borderWidth: 1,
               width: '50%',
             }}
+            onPress={() => setRejectModalVisible(true)}
             textStyle={{color: Colors.Primary}}
           />
           <ActionButton

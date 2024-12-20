@@ -134,3 +134,18 @@ export const DeliveryOrder = [
     dropLocation: '1857 St. John Street, Kleinmond, Western Cape, South Africa',
   },
 ];
+
+export const DeliveryStatus = [
+  {
+    id: 1,
+    status: 'Picked Up',
+  },
+  {
+    id: 2,
+    status: 'In-Transit',
+  },
+  {
+    id: 3,
+    status: 'Delivered',
+  },
+];

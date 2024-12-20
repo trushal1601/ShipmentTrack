@@ -39,4 +39,7 @@ export const Images = {
   clock: require('../Assets/Images/clock.png'),
   red_round: require('../Assets/Images/round.png'),
   downArrow: require('../Assets/Images/downarrow.png'),
+  Selcted: require('../Assets/Images/Selected.png'),
+  UnSelcted: require('../Assets/Images/UnSelected.png'),
+  danger: require('../Assets/Images/danger.png'),
 };

@@ -31,5 +31,6 @@ export const Labels = {
   Shipment_Information: 'Shipment Information',
   PickUp_Location: 'Pick-Up Location',
   Drop_Location: 'Drop Location',
-  Shipment_Status:'Shipment Status'
+  Shipment_Status:'Shipment Status',
+  Reject_Shipment_Delivery:'Reject Shipment Delivery',
 };
