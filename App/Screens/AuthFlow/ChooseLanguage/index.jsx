@@ -9,17 +9,22 @@ import {
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {getImageSource} from '../../../Helper/ImageUri';
-import {Colors, Fonts, Images} from '../../../Assets/Assets';
+import {Colors, Images} from '../../../Assets/Assets';
 import Scale from '../../../Helper/Responsive';
 import {CountryData} from '../../../Helper/JsonData';
 import {ActionButton} from '../../../Components/Component';
 import {Labels} from '../../../Assets/Labels';
 import {useNavigation} from '@react-navigation/native';
 import ChooseLanguageStyle from './ChooseLanguageStyle';
+import {language} from '../../../Redux/Actions/authAction';
+import {useDispatch} from 'react-redux';
+import {Formik} from 'formik';
+import * as Yup from 'yup';
 
 const ChooseLanguage = () => {
+  const dispatch = useDispatch();
   const navigation = useNavigation();
-  const [selectedItem, setSelectedItem] = useState(CountryData[0]?.id);
+  const [selectedItem, setSelectedItem] = useState(null);
 
   useEffect(() => {
     StatusBar.setBarStyle('dark-content');
@@ -31,62 +36,80 @@ const ChooseLanguage = () => {
       StatusBar.setTranslucent(false);
     };
   }, []);
-  const handlePress = item => {
+
+  const handlePress = (item, setFieldValue) => {
     setSelectedItem(item.id);
-  };
-  const Footer = () => {
-    return (
-      <View style={ChooseLanguageStyle.listContainer}>
-        <FlatList
-          data={CountryData}
-          contentContainerStyle={{paddingBottom: Scale(15)}}
-          keyExtractor={item => item.id.toString()}
-          renderItem={({item}) => (
-            <TouchableWithoutFeedback onPress={() => handlePress(item)}>
-              <View style={ChooseLanguageStyle.listItem}>
-                <View style={ChooseLanguageStyle.itemContent}>
-                  <Image
-                    source={getImageSource(item.icon)}
-                    style={ChooseLanguageStyle.itemIcon}
-                  />
-                  <Text style={ChooseLanguageStyle.itemText}>{item.name}</Text>
-                </View>
-                <Image
-                  source={
-                    selectedItem === item.id ? Images.sradio : Images.UnSradio
-                  }
-                  style={ChooseLanguageStyle.radioIcon}
-                />
-              </View>
-            </TouchableWithoutFeedback>
-          )}
-        />
-        <ActionButton
-          value={Labels.continue}
-          onPress={() => navigation.navigate('loginScreen')}
-        />
-      </View>
-    );
+    dispatch(language(item));
+    setFieldValue('language', item.id);
   };
 
+  const validationSchema = Yup.object().shape({
+    language: Yup.string().required('Please select a language'),
+  });
+
   return (
-    <View style={ChooseLanguageStyle.container}>
-      <StatusBar
-        translucent
-        backgroundColor="transparent"
-        barStyle={'dark-content'}
-      />
-      <ImageBackground
-        source={getImageSource(Images.bg_img)}
-        resizeMode="cover"
-        style={ChooseLanguageStyle.background}>
-        <View style={ChooseLanguageStyle.overlay} />
-        <View style={ChooseLanguageStyle.content}>
-          <Text style={ChooseLanguageStyle.title}>{Labels.language}</Text>
-          {Footer()}
+    <Formik
+      initialValues={{language: ''}}
+      validationSchema={validationSchema}
+      onSubmit={values => {
+        navigation.navigate('loginScreen');
+      }}>
+      {({handleSubmit, setFieldValue, errors, touched}) => (
+        <View style={ChooseLanguageStyle.container}>
+          <StatusBar
+            translucent
+            backgroundColor="transparent"
+            barStyle={'dark-content'}
+          />
+          <ImageBackground
+            source={getImageSource(Images.bg_img)}
+            resizeMode="cover"
+            style={ChooseLanguageStyle.background}>
+            <View style={ChooseLanguageStyle.overlay} />
+            <View style={ChooseLanguageStyle.content}>
+              <Text style={ChooseLanguageStyle.title}>{Labels.language}</Text>
+              <View style={ChooseLanguageStyle.listContainer}>
+                <FlatList
+                  data={CountryData}
+                  contentContainerStyle={{paddingBottom: Scale(10)}}
+                  keyExtractor={item => item.id.toString()}
+                  renderItem={({item}) => (
+                    <TouchableWithoutFeedback
+                      onPress={() => handlePress(item, setFieldValue)}>
+                      <View style={ChooseLanguageStyle.listItem}>
+                        <View style={ChooseLanguageStyle.itemContent}>
+                          <Image
+                            source={getImageSource(item.icon)}
+                            style={ChooseLanguageStyle.itemIcon}
+                          />
+                          <Text style={ChooseLanguageStyle.itemText}>
+                            {item.name}
+                          </Text>
+                        </View>
+                        <Image
+                          source={
+                            selectedItem === item.id
+                              ? Images.sradio
+                              : Images.UnSradio
+                          }
+                          style={ChooseLanguageStyle.radioIcon}
+                        />
+                      </View>
+                    </TouchableWithoutFeedback>
+                  )}
+                />
+                {errors.language && touched.language && (
+                  <Text style={ChooseLanguageStyle.errorText}>
+                    {errors.language}
+                  </Text>
+                )}
+                <ActionButton value={Labels.continue} onPress={handleSubmit} />
+              </View>
+            </View>
+          </ImageBackground>
         </View>
-      </ImageBackground>
-    </View>
+      )}
+    </Formik>
   );
 };
 

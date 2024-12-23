@@ -3,6 +3,8 @@ import React, {useEffect} from 'react';
 import SplashScreen from 'react-native-splash-screen';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import MainNavigator from './App/Navigator/MainNavigator';
+import {Provider} from 'react-redux';
+import {store} from './App/Redux/Store';
 
 const App = () => {
   useEffect(() => {
@@ -12,9 +14,11 @@ const App = () => {
     return () => clearTimeout(timeOut);
   }, []);
   return (
-    <GestureHandlerRootView>
-      <MainNavigator />
-    </GestureHandlerRootView>
+    <Provider store={store}>
+      <GestureHandlerRootView>
+        <MainNavigator />
+      </GestureHandlerRootView>
+    </Provider>
   );
 };
 

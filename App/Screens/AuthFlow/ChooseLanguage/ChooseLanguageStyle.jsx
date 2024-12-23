@@ -61,4 +61,11 @@ export default StyleSheet.create({
     width: Scale(25),
     marginLeft: Scale(10),
   },
+  errorText: {
+    color: 'red',
+    fontSize: Scale(14),
+    fontFamily: Fonts.proximanova_regular,
+    paddingBottom: Scale(10),
+    paddingHorizontal: Scale(15),
+  },
 });

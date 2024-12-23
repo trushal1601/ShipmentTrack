@@ -32,7 +32,6 @@ const DeliveryDetails = ({route}) => {
   const refStatusRBSheet = useRef();
   const refRejectRBSheet = useRef();
   const {data} = route.params;
-  console.log('data', data);
 
   useEffect(() => {
     const showSubscription = Keyboard.addListener('keyboardDidShow', () => {
@@ -311,7 +310,7 @@ const DeliveryDetails = ({route}) => {
         ref={refRejectRBSheet}
         draggable={true}
         draggableIcon={true}
-        height={Scale(300)}
+        height={Scale(325)}
         dragFromTopOnly={true}
         closeOnDragDown={true}
         customStyles={{

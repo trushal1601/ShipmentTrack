@@ -18,18 +18,19 @@ import {ActionButton} from '../../../Components/Component';
 import {getImageSource} from '../../../Helper/ImageUri';
 import HomeScreenStyle from './HomeScreenStyle';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
+import {useDispatch, useSelector} from 'react-redux';
+import {language} from '../../../Redux/Actions/authAction';
 
 const HomeScreen = () => {
+  const dispatch = useDispatch();
   const navigation = useNavigation();
+  const selectedLanguage = useSelector(
+    state => state.language.selectedLanguage,
+  );
+  console.log('selectedLanguage', selectedLanguage);
   const [countryModalVisible, setCountryModalVisible] = useState(false);
   const [logoutModalVisible, setLogoutModalVisible] = useState(false);
-  const [selectedItem, setSelectedItem] = useState(CountryData[0]?.id);
-  const [selectedImage, setSelectedImage] = useState(
-    getImageSource(
-      CountryData.find(status => status.id === CountryData[0]?.id)?.icon ||
-        Images.uk_icon,
-    ),
-  );
+  const [selectedItem, setSelectedItem] = useState(selectedLanguage.icon);
   const refCountryRBSheet = useRef();
   const refLogoutRBSheet = useRef();
 
@@ -70,15 +71,9 @@ const HomeScreen = () => {
 
   const handlePress = item => {
     setSelectedItem(item.id);
+    dispatch(language(item));
   };
   const handlePressDone = () => {
-    const selectedCountry = CountryData.find(
-      status => status.id === selectedItem,
-    );
-    const newImage = selectedCountry
-      ? getImageSource(selectedCountry.icon)
-      : Images.uk_icon;
-    setSelectedImage(newImage);
     setCountryModalVisible(false);
   };
 
@@ -88,7 +83,10 @@ const HomeScreen = () => {
         <Image source={Images.logo} style={HomeScreenStyle.logo} />
         <View style={HomeScreenStyle.headerRightContainer}>
           <TouchableOpacity onPress={() => setCountryModalVisible(true)}>
-            <Image source={selectedImage} style={HomeScreenStyle.icon} />
+            <Image
+              source={selectedLanguage.icon}
+              style={HomeScreenStyle.icon}
+            />
           </TouchableOpacity>
           <TouchableOpacity
             style={HomeScreenStyle.notificationButton}

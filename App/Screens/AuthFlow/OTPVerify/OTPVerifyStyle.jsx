@@ -41,10 +41,11 @@ export default StyleSheet.create({
     borderColor: Colors.Grey400,
   },
   cellText: {
-    fontSize: Scale(24),
+    fontSize: Scale(16),
     color: Colors.Grey400,
     textAlign: 'center',
-    marginTop: Scale(8),
+    marginTop: Scale(16),
+    fontFamily:Fonts.proximanova_bold
   },
   errorText: {
     color: Colors.Red,
