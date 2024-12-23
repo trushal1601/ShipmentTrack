@@ -61,14 +61,14 @@ export default StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: Scale(5),
-    paddingHorizontal: Scale(20),
+    paddingHorizontal: Scale(15),
     borderBottomWidth: Scale(1),
     borderColor: Colors.Grey100,
     marginTop: Scale(10),
   },
   logo: {
     height: Scale(30),
-    width: Scale(60),
+    width: Scale(90),
     resizeMode: 'contain',
   },
   headerRightContainer: {

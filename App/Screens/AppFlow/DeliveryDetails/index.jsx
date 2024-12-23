@@ -3,6 +3,7 @@ import {
   Image,
   Keyboard,
   ScrollView,
+  StatusBar,
   Text,
   TextInput,
   TouchableOpacity,
@@ -362,6 +363,14 @@ const DeliveryDetails = ({route}) => {
 
   return (
     <View style={DeliveryDetailsStyle.container}>
+      <StatusBar
+        backgroundColor={
+          statusModalVisible || rejectModalVisible === true
+            ? '#36393C99'
+            : Colors.White
+        }
+        barStyle={'dark-content'}
+      />
       <ScrollView showsVerticalScrollIndicator={false}>
         <Header header={Labels.My_Delivery} />
         <View style={DeliveryDetailsStyle.contentContainer}>
