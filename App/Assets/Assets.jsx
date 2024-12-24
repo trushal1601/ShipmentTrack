@@ -42,4 +42,5 @@ export const Images = {
   Selcted: require('../Assets/Images/Selected.png'),
   UnSelcted: require('../Assets/Images/UnSelected.png'),
   danger: require('../Assets/Images/danger.png'),
+  splash: require('../Assets/Images/splash.png'),
 };

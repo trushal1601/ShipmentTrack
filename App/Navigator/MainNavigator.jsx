@@ -8,14 +8,16 @@ import OTPVerify from '../Screens/AuthFlow/OTPVerify';
 import TabNavigator from './TabNavigator';
 import Notification from '../Screens/AppFlow/Notification';
 import DeliveryDetails from '../Screens/AppFlow/DeliveryDetails';
+import SplashScreen from '../Screens/AuthFlow/SplashScreen/SplashScreen';
 
 const MainNavigator = () => {
   const Stack = createNativeStackNavigator();
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="chooseLanguage"
+        initialRouteName="splash"
         screenOptions={{headerShown: false, animation: 'slide_from_right'}}>
+        <Stack.Screen name="splash" component={SplashScreen} />
         <Stack.Screen name="chooseLanguage" component={ChooseLanguage} />
         <Stack.Screen name="loginScreen" component={Login} />
         <Stack.Screen name="OTPVerify" component={OTPVerify} />

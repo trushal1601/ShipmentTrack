@@ -17,14 +17,16 @@ import {Labels} from '../../../Assets/Labels';
 import {useNavigation} from '@react-navigation/native';
 import ChooseLanguageStyle from './ChooseLanguageStyle';
 import {language} from '../../../Redux/Actions/authAction';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 
 const ChooseLanguage = () => {
   const dispatch = useDispatch();
+  const {selectedLanguage} = useSelector(state => state.language_id);
+  console.log('sfsf', selectedLanguage);
   const navigation = useNavigation();
-  const [selectedItem, setSelectedItem] = useState(null);
+  const [selectedItem, setSelectedItem] = useState(1);
 
   useEffect(() => {
     StatusBar.setBarStyle('dark-content');

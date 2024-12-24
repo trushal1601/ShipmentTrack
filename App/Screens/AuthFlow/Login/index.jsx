@@ -7,8 +7,11 @@ import Scale from '../../../Helper/Responsive';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 import LoginStyle from './LoginStyle';
+import { useDispatch } from 'react-redux';
+import { loginUser } from '../../../Redux/Features/UserSlice';
 
 const Login = ({navigation}) => {
+  const dispatch = useDispatch()
   const validationSchema = Yup.object().shape({
     email: Yup.string()
       .matches(
@@ -35,6 +38,7 @@ const Login = ({navigation}) => {
       onSubmit={values => {
         // console.log(values);
         navigation.navigate('OTPVerify', {email: values.email});
+        dispatch(loginUser(values.email))
       }}>
       {({handleChange, handleBlur, handleSubmit, values, errors, touched}) => (
         <View style={LoginStyle.container}>
