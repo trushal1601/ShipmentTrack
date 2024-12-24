@@ -20,13 +20,15 @@ import {language} from '../../../Redux/Actions/authAction';
 import {useDispatch, useSelector} from 'react-redux';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
+import {useLabels} from '../../../Helper/ReduxLabels';
 
 const ChooseLanguage = () => {
   const dispatch = useDispatch();
-  const {selectedLanguage} = useSelector(state => state.language_id);
-  console.log('sfsf', selectedLanguage);
+  const labels = useLabels();
+  console.log('label', labels);
+
   const navigation = useNavigation();
-  const [selectedItem, setSelectedItem] = useState(1);
+  const [selectedItem, setSelectedItem] = useState();
 
   useEffect(() => {
     StatusBar.setBarStyle('dark-content');
@@ -69,7 +71,9 @@ const ChooseLanguage = () => {
             style={ChooseLanguageStyle.background}>
             <View style={ChooseLanguageStyle.overlay} />
             <View style={ChooseLanguageStyle.content}>
-              <Text style={ChooseLanguageStyle.title}>{Labels.language}</Text>
+              <Text style={ChooseLanguageStyle.title}>
+                {labels?.chooseLanguage}
+              </Text>
               <View style={ChooseLanguageStyle.listContainer}>
                 <FlatList
                   data={CountryData}
@@ -105,7 +109,7 @@ const ChooseLanguage = () => {
                     {errors.language}
                   </Text>
                 )}
-                <ActionButton value={Labels.continue} onPress={handleSubmit} />
+                <ActionButton value={labels?.continue} onPress={handleSubmit} />
               </View>
             </View>
           </ImageBackground>

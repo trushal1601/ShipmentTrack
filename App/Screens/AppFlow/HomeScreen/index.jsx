@@ -20,6 +20,7 @@ import HomeScreenStyle from './HomeScreenStyle';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
 import {language} from '../../../Redux/Actions/authAction';
+// import RNRestart from 'react-native-restart';
 
 const HomeScreen = () => {
   const dispatch = useDispatch();
@@ -30,9 +31,13 @@ const HomeScreen = () => {
   console.log('selectedLanguage', selectedLanguage);
   const [countryModalVisible, setCountryModalVisible] = useState(false);
   const [logoutModalVisible, setLogoutModalVisible] = useState(false);
-  const [selectedItem, setSelectedItem] = useState(selectedLanguage.icon);
+  const [selectedItem, setSelectedItem] = useState(selectedLanguage?.icon);
   const refCountryRBSheet = useRef();
   const refLogoutRBSheet = useRef();
+
+  const handleLogout = () => {
+    // RNRestart.Restart();
+  };
 
   useEffect(() => {
     if (countryModalVisible) {
@@ -84,7 +89,7 @@ const HomeScreen = () => {
         <View style={HomeScreenStyle.headerRightContainer}>
           <TouchableOpacity onPress={() => setCountryModalVisible(true)}>
             <Image
-              source={selectedLanguage.icon}
+              source={selectedLanguage?.icon}
               style={HomeScreenStyle.icon}
             />
           </TouchableOpacity>
@@ -272,7 +277,7 @@ const HomeScreen = () => {
               <ActionButton
                 value={'Yes, Logout'}
                 style={{width: '50%'}}
-                onPress={() => navigation.navigate('chooseLanguage')}
+                onPress={handleLogout}
               />
             </View>
           </View>

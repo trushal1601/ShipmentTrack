@@ -1,3 +1,8 @@
+// import { useSelector } from "react-redux";
+
+// const {selectedLanguage} = useSelector(state => state.language_id);
+//   console.log('sfsf', selectedLanguage);
+
 export const Labels = {
   language: 'Choose Language',
   english: 'English',
@@ -31,6 +36,6 @@ export const Labels = {
   Shipment_Information: 'Shipment Information',
   PickUp_Location: 'Pick-Up Location',
   Drop_Location: 'Drop Location',
-  Shipment_Status:'Shipment Status',
-  Reject_Shipment_Delivery:'Reject Shipment Delivery',
+  Shipment_Status: 'Shipment Status',
+  Reject_Shipment_Delivery: 'Reject Shipment Delivery',
 };
