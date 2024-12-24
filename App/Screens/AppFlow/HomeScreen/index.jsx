@@ -13,17 +13,19 @@ import RBSheet from 'react-native-raw-bottom-sheet';
 import {Colors, Fonts, Images} from '../../../Assets/Assets';
 import Scale from '../../../Helper/Responsive';
 import {Labels} from '../../../Assets/Labels';
-import {CountryData, ShipmentData} from '../../../Helper/JsonData';
+import {CountryData} from '../../../Helper/JsonData';
 import {ActionButton} from '../../../Components/Component';
 import {getImageSource} from '../../../Helper/ImageUri';
 import HomeScreenStyle from './HomeScreenStyle';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
 import {language} from '../../../Redux/Actions/authAction';
+import {useLabels} from '../../../Helper/ReduxLabels';
 // import RNRestart from 'react-native-restart';
 
 const HomeScreen = () => {
   const dispatch = useDispatch();
+  const label = useLabels();
   const navigation = useNavigation();
   const selectedLanguage = useSelector(
     state => state.language.selectedLanguage,
@@ -34,6 +36,37 @@ const HomeScreen = () => {
   const [selectedItem, setSelectedItem] = useState(selectedLanguage?.icon);
   const refCountryRBSheet = useRef();
   const refLogoutRBSheet = useRef();
+
+  const ShipmentData = [
+    {
+      id: 1,
+      label: label.deliveriesAssigned,
+      count: 10,
+      status: Images.icon1,
+      bgColor: '#DBF2FF',
+    },
+    {
+      id: 2,
+      label: label.completedDeliveries,
+      count: '06',
+      status: Images.icon2,
+      bgColor: '#DDF3E6',
+    },
+    {
+      id: 3,
+      label: label.pendingDeliveries,
+      count: '01',
+      status: Images.icon3,
+      bgColor: '#FFF6D8',
+    },
+    {
+      id: 4,
+      label: label.delayedDeliveries,
+      count: '03',
+      status: Images.icon4,
+      bgColor: '#FFEDED',
+    },
+  ];
 
   const handleLogout = () => {
     // RNRestart.Restart();
@@ -106,7 +139,7 @@ const HomeScreen = () => {
   const HomeCard = () => {
     return (
       <View style={HomeScreenStyle.homeCardContainer}>
-        <Text style={HomeScreenStyle.shipmentLabel}>{Labels.ShipmentData}</Text>
+        <Text style={HomeScreenStyle.shipmentLabel}>{label.shipmentData}</Text>
         <FlatList
           data={ShipmentData}
           numColumns={2}
@@ -210,7 +243,7 @@ const HomeScreen = () => {
         onPress={() => {
           setLogoutModalVisible(true);
         }}>
-        <Text style={HomeScreenStyle.logoutText}>{Labels.logout}</Text>
+        <Text style={HomeScreenStyle.logoutText}>{label.logout}</Text>
       </TouchableOpacity>
     );
   };
@@ -242,7 +275,7 @@ const HomeScreen = () => {
                 fontFamily: Fonts.proximanova_bold,
                 fontSize: Scale(18),
               }}>
-              {Labels.logout}
+              {label.logout}
             </Text>
             <Text
               style={{
@@ -252,7 +285,7 @@ const HomeScreen = () => {
                 fontSize: Scale(16),
                 marginTop: Scale(5),
               }}>
-              {Labels.Are_you_sure_you_want_to_logout}
+              {label.alertMessage}
             </Text>
             <View
               style={{
@@ -275,7 +308,7 @@ const HomeScreen = () => {
                 onPress={() => setLogoutModalVisible(false)}
               />
               <ActionButton
-                value={'Yes, Logout'}
+                value={label.yesLogout}
                 style={{width: '50%'}}
                 onPress={handleLogout}
               />

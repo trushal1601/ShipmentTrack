@@ -17,10 +17,12 @@ import {Labels} from '../../../Assets/Labels';
 import Scale from '../../../Helper/Responsive';
 import DeliveryDetailsStyle from './DeliveryDetailsStyle';
 import RBSheet from 'react-native-raw-bottom-sheet';
-import {DeliveryStatus} from '../../../Helper/JsonData';
+// import {DeliveryStatus} from '../../../Helper/JsonData';
 import {useNavigation} from '@react-navigation/native';
+import {useLabels} from '../../../Helper/ReduxLabels';
 
 const DeliveryDetails = ({route}) => {
+  const label = useLabels();
   const navigation = useNavigation();
   const [agentId, setAgentId] = useState('');
   const [selectedItem, setSelectedItem] = useState(null);
@@ -32,6 +34,21 @@ const DeliveryDetails = ({route}) => {
   const refStatusRBSheet = useRef();
   const refRejectRBSheet = useRef();
   const {data} = route.params;
+
+  const DeliveryStatus = [
+    {
+      id: 1,
+      status: label.pickup,
+    },
+    {
+      id: 2,
+      status: label.inTransit,
+    },
+    {
+      id: 3,
+      status: label.delivered,
+    },
+  ];
 
   useEffect(() => {
     const showSubscription = Keyboard.addListener('keyboardDidShow', () => {
@@ -81,7 +98,7 @@ const DeliveryDetails = ({route}) => {
     return (
       <View style={DeliveryDetailsStyle.itemHeader}>
         <Text style={DeliveryDetailsStyle.shipmentTypeText}>
-          {Labels.Shipment_Type}
+          {label.shipmentType}
         </Text>
         <View
           style={[
@@ -100,9 +117,9 @@ const DeliveryDetails = ({route}) => {
   const AgentIdSection = () => {
     return (
       <View>
-        <Text style={DeliveryDetailsStyle.agentIdText}>{Labels.AgentID}</Text>
+        <Text style={DeliveryDetailsStyle.agentIdText}>{label.agentID}</Text>
         <TextInput
-          placeholder="Please enter agent id"
+          placeholder={label.pleaseEnterAgentId}
           placeholderTextColor={Colors.Grey200}
           value={agentId}
           onChangeText={text => setAgentId(text)}
@@ -117,13 +134,13 @@ const DeliveryDetails = ({route}) => {
       <View style={DeliveryDetailsStyle.row}>
         <View style={DeliveryDetailsStyle.rowItem}>
           <Text style={DeliveryDetailsStyle.rowItemHeader}>
-            {Labels.ShipmentID}
+            {label.shipmentId}
           </Text>
           <Text style={DeliveryDetailsStyle.rowItemText}>{data.id}</Text>
         </View>
         <View style={DeliveryDetailsStyle.rowItem}>
           <Text style={DeliveryDetailsStyle.rowItemHeader}>
-            {Labels.Total_Charges}
+            {label.totalCharges}
           </Text>
           <Text style={DeliveryDetailsStyle.rowItemText}>₹ {data.charge}</Text>
         </View>
@@ -152,7 +169,7 @@ const DeliveryDetails = ({route}) => {
           </View>
           <View>
             <Text style={DeliveryDetailsStyle.pickUpText}>
-              {Labels.PickUp_Date}
+              {label.pickUpDate}
             </Text>
             <Text style={DeliveryDetailsStyle.dateTimeText}>
               {data.pickUpDate}
@@ -169,7 +186,7 @@ const DeliveryDetails = ({route}) => {
           </View>
           <View>
             <Text style={DeliveryDetailsStyle.pickUpText}>
-              {Labels.PickUp_Time}
+              {label.pickUpTime}
             </Text>
             <Text style={DeliveryDetailsStyle.dateTimeText}>
               {data.pickUpTime}
@@ -186,9 +203,7 @@ const DeliveryDetails = ({route}) => {
           source={Images.red_round}
           style={[DeliveryDetailsStyle.dot, {left: Scale(-7), top: Scale(0)}]}
         />
-        <Text style={DeliveryDetailsStyle.pickUp}>
-          {Labels.PickUp_Location}
-        </Text>
+        <Text style={DeliveryDetailsStyle.pickUp}>{label.pickUpLocation}</Text>
         <Text style={DeliveryDetailsStyle.pickUpData}>
           {data.pickUpLocation}
         </Text>
@@ -208,7 +223,7 @@ const DeliveryDetails = ({route}) => {
         style={{
           paddingHorizontal: Scale(30),
         }}>
-        <Text style={DeliveryDetailsStyle.pickUp}>{Labels.Drop_Location}</Text>
+        <Text style={DeliveryDetailsStyle.pickUp}>{label.dropLocation}</Text>
         <Text style={DeliveryDetailsStyle.pickUpData}>{data.dropLocation}</Text>
       </View>
     );
@@ -228,14 +243,14 @@ const DeliveryDetails = ({route}) => {
         {showStatus === true ? (
           <View style={{marginTop: Scale(15)}}>
             <Text style={DeliveryDetailsStyle.statusText}>
-              {Labels.Shipment_Status}
+              {label.shipmentstatus}
             </Text>
             <TouchableOpacity
               onPress={() => setStatusModalVisible(true)}
               style={DeliveryDetailsStyle.statusView}>
               <Text style={DeliveryDetailsStyle.status}>
                 {selectedStatus === null
-                  ? 'Please select status'
+                  ? label.pleaseSelectStatus
                   : selectedStatus}
               </Text>
               <Image
@@ -295,7 +310,7 @@ const DeliveryDetails = ({route}) => {
             }}
           />
           <ActionButton
-            value={'Done'}
+            value={label.done}
             style={{marginHorizontal: Scale(10), marginTop: Scale(15)}}
             onPress={handlePressDone}
           />
@@ -329,17 +344,15 @@ const DeliveryDetails = ({route}) => {
               style={DeliveryDetailsStyle.rejectImg}
             />
             <Text style={DeliveryDetailsStyle.rejectLabel}>
-              {Labels.Reject_Shipment_Delivery}
+              {label.RejectShipmentDelivery}
             </Text>
             <Text style={DeliveryDetailsStyle.rejectBio}>
-              Are you sure you want to reject this shipment delivery? Confirm
-              your decision to ensure precise and efficient shipment tracking
-              management.
+              {label.RejectModalSomeWords}
             </Text>
           </View>
           <View style={DeliveryDetailsStyle.rejectButtonView}>
             <ActionButton
-              value={'Cancel'}
+              value={label.cancel}
               style={{
                 borderColor: Colors.Primary,
                 backgroundColor: Colors.White,
@@ -350,7 +363,7 @@ const DeliveryDetails = ({route}) => {
               onPress={() => setRejectModalVisible(false)}
             />
             <ActionButton
-              value={'Yes'}
+              value={label.yes}
               style={{width: '50%'}}
               onPress={() => navigation.navigate('myDelivery')}
             />
@@ -371,16 +384,16 @@ const DeliveryDetails = ({route}) => {
         barStyle={'dark-content'}
       />
       <ScrollView showsVerticalScrollIndicator={false}>
-        <Header header={Labels.My_Delivery} />
+        <Header header={label.myDelivery} />
         <View style={DeliveryDetailsStyle.contentContainer}>
           <Text
             style={[DeliveryDetailsStyle.headerText, {marginTop: Scale(8)}]}>
-            {Labels.Shipment_Details}
+            {label.shipmentDetails}
           </Text>
           {ShipmentDetails()}
           <Text
             style={[DeliveryDetailsStyle.headerText, {marginTop: Scale(20)}]}>
-            {Labels.Shipment_Information}
+            {label.shipmentInformation}
           </Text>
           {ShipmentInfo()}
           {StatusModel()}
@@ -390,7 +403,7 @@ const DeliveryDetails = ({route}) => {
       {!isKeyboardVisible &&
         (showStatus ? (
           <ActionButton
-            value={'Update'}
+            value={label.update}
             disabled={!selectedStatus}
             style={{marginHorizontal: Scale(20), marginBottom: Scale(10)}}
             onPress={() => navigation.navigate('myDelivery')}
@@ -398,7 +411,7 @@ const DeliveryDetails = ({route}) => {
         ) : (
           <View style={DeliveryDetailsStyle.bottomButton}>
             <ActionButton
-              value={'Reject'}
+              value={label.reject}
               style={{
                 borderColor: Colors.Primary,
                 backgroundColor: Colors.White,
@@ -409,7 +422,7 @@ const DeliveryDetails = ({route}) => {
               textStyle={{color: Colors.Primary}}
             />
             <ActionButton
-              value={'Accept'}
+              value={label.accept}
               style={{width: '50%'}}
               disabled={agentId.length !== 12}
               onPress={() => setShowStatus(true)}

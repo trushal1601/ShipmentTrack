@@ -5,9 +5,11 @@ import {Colors, Fonts} from '../Assets/Assets';
 import HomeScreen from '../Screens/AppFlow/HomeScreen';
 import MyDelivery from '../Screens/AppFlow/MyDelivery';
 import Scale from '../Helper/Responsive';
+import {useLabels} from '../Helper/ReduxLabels';
 
 const TabNavigator = () => {
   const Tab = createBottomTabNavigator();
+  const label = useLabels();
 
   return (
     <Tab.Navigator
@@ -63,7 +65,7 @@ const TabNavigator = () => {
                 fontFamily: Fonts.proximanova_regular,
                 fontSize: Scale(14),
               }}>
-              Home
+              {label.home}
             </Text>
           ),
         }}
@@ -104,7 +106,7 @@ const TabNavigator = () => {
                 fontFamily: Fonts.Lexend_Medium,
                 fontSize: Scale(14),
               }}>
-              My Delivery
+              {label.myDelivery}
             </Text>
           ),
         }}

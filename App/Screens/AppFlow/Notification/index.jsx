@@ -5,8 +5,10 @@ import {Header} from '../../../Components/Component';
 import {Labels} from '../../../Assets/Labels';
 import {NotificationData} from '../../../Helper/JsonData';
 import NotificationStyle from './NotificationStyle';
+import {useLabels} from '../../../Helper/ReduxLabels';
 
 const Notification = () => {
+  const label = useLabels();
   const Notify = () => {
     return (
       <FlatList
@@ -29,7 +31,7 @@ const Notification = () => {
   };
   return (
     <View style={NotificationStyle.container}>
-      <Header header={Labels.Notification} />
+      <Header header={label.notification} />
       {Notify()}
     </View>
   );

@@ -23,8 +23,10 @@ import {
 } from 'react-native-confirmation-code-field';
 import {useNavigation} from '@react-navigation/native';
 import OTPVerifyStyle from './OTPVerifyStyle';
+import {useLabels} from '../../../Helper/ReduxLabels';
 
 const OTPVerify = ({route, initialSeconds = 60}) => {
+  const label = useLabels();
   const navigation = useNavigation();
   const {email} = route.params;
   const [otp, setOtp] = useState('');
@@ -72,29 +74,32 @@ const OTPVerify = ({route, initialSeconds = 60}) => {
 
   const OTPFill = () => {
     return (
-      <CodeField
-        ref={ref}
-        {...props}
-        value={otp}
-        onChangeText={setOtp}
-        cellCount={CELL_COUNT}
-        rootStyle={OTPVerifyStyle.codeFieldRoot}
-        keyboardType="number-pad"
-        textContentType="oneTimeCode"
-        renderCell={({index, symbol, isFocused}) => (
-          <View
-            onLayout={getCellOnLayoutHandler(index)}
-            key={index}
-            style={[
-              OTPVerifyStyle.cell,
-              isFocused && OTPVerifyStyle.focusCell,
-            ]}>
-            <Text style={OTPVerifyStyle.cellText}>
-              {symbol || (isFocused ? <Cursor /> : null)}
-            </Text>
-          </View>
-        )}
-      />
+      <>
+        <CodeField
+          ref={ref}
+          {...props}
+          value={otp}
+          onChangeText={setOtp}
+          cellCount={CELL_COUNT}
+          rootStyle={OTPVerifyStyle.codeFieldRoot}
+          keyboardType="number-pad"
+          textContentType="oneTimeCode"
+          renderCell={({index, symbol, isFocused}) => (
+            <View
+              onLayout={getCellOnLayoutHandler(index)}
+              key={index}
+              style={[
+                OTPVerifyStyle.cell,
+                isFocused && OTPVerifyStyle.focusCell,
+              ]}>
+              <Text style={OTPVerifyStyle.cellText}>
+                {symbol || (isFocused ? <Cursor /> : null)}
+              </Text>
+            </View>
+          )}
+        />
+        {/* <Text>{label.otp_valid}</Text> */}
+      </>
     );
   };
 
@@ -112,8 +117,10 @@ const OTPVerify = ({route, initialSeconds = 60}) => {
           <Header />
 
           <View style={OTPVerifyStyle.innerContainer}>
-            <Text style={OTPVerifyStyle.headerText}>{Labels.otp}</Text>
-            <Text style={OTPVerifyStyle.bioText}>{Labels.otpBio}</Text>
+            <Text style={OTPVerifyStyle.headerText}>
+              {label.otpVarification}
+            </Text>
+            <Text style={OTPVerifyStyle.bioText}>{label.otpSomeword}</Text>
             {Email()}
             {OTPFill()}
             {touched.otp && errors.otp && (
@@ -137,7 +144,7 @@ const OTPVerify = ({route, initialSeconds = 60}) => {
               </Text>
             )}
             <ActionButton
-              value={'Verify'}
+              value={label.verify}
               disabled={otp.length < CELL_COUNT || !!errors.otp}
               onPress={() => navigation.navigate('home')}
               style={OTPVerifyStyle.verifyButton}

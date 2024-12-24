@@ -11,7 +11,6 @@ import React, {useEffect, useState} from 'react';
 import {getImageSource} from '../../../Helper/ImageUri';
 import {Colors, Images} from '../../../Assets/Assets';
 import Scale from '../../../Helper/Responsive';
-import {CountryData} from '../../../Helper/JsonData';
 import {ActionButton} from '../../../Components/Component';
 import {Labels} from '../../../Assets/Labels';
 import {useNavigation} from '@react-navigation/native';
@@ -23,9 +22,8 @@ import * as Yup from 'yup';
 import {useLabels} from '../../../Helper/ReduxLabels';
 
 const ChooseLanguage = () => {
+  const label = useLabels();
   const dispatch = useDispatch();
-  const labels = useLabels();
-  console.log('label', labels);
 
   const navigation = useNavigation();
   const [selectedItem, setSelectedItem] = useState();
@@ -51,6 +49,11 @@ const ChooseLanguage = () => {
     language: Yup.string().required('Please select a language'),
   });
 
+  const CountryData = [
+    {id: 1, name: Labels.english, icon: Images.uk_icon},
+    {id: 2, name: Labels.french, icon: Images.france_icon},
+  ];
+
   return (
     <Formik
       initialValues={{language: ''}}
@@ -71,9 +74,7 @@ const ChooseLanguage = () => {
             style={ChooseLanguageStyle.background}>
             <View style={ChooseLanguageStyle.overlay} />
             <View style={ChooseLanguageStyle.content}>
-              <Text style={ChooseLanguageStyle.title}>
-                {labels?.chooseLanguage}
-              </Text>
+              <Text style={ChooseLanguageStyle.title}>{Labels.language}</Text>
               <View style={ChooseLanguageStyle.listContainer}>
                 <FlatList
                   data={CountryData}
@@ -109,7 +110,7 @@ const ChooseLanguage = () => {
                     {errors.language}
                   </Text>
                 )}
-                <ActionButton value={labels?.continue} onPress={handleSubmit} />
+                <ActionButton value={Labels.continue} onPress={handleSubmit} />
               </View>
             </View>
           </ImageBackground>

@@ -1,7 +1,6 @@
 import {Images} from '../Assets/Assets';
 import {Labels} from '../Assets/Labels';
 
-
 export const CountryData = [
   {id: 1, name: Labels.english, icon: Images.uk_icon},
   {id: 2, name: Labels.french, icon: Images.france_icon},
@@ -136,17 +135,4 @@ export const DeliveryOrder = [
   },
 ];
 
-export const DeliveryStatus = [
-  {
-    id: 1,
-    status: 'Picked Up',
-  },
-  {
-    id: 2,
-    status: 'In-Transit',
-  },
-  {
-    id: 3,
-    status: 'Delivered',
-  },
-];
+// export 

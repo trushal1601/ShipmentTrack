@@ -14,9 +14,11 @@ import Scale from '../../../Helper/Responsive';
 import {DeliveryOrder} from '../../../Helper/JsonData';
 import MyDeliveryStyle from './MyDeliveryStyle';
 import {useNavigation} from '@react-navigation/native';
+import {useLabels} from '../../../Helper/ReduxLabels';
 
 const MyDelivery = () => {
   const navigation = useNavigation();
+  const label = useLabels();
 
   const Delivery = () => {
     return (
@@ -30,7 +32,7 @@ const MyDelivery = () => {
             <View style={MyDeliveryStyle.itemContainer}>
               <View style={MyDeliveryStyle.itemHeader}>
                 <Text style={MyDeliveryStyle.shipmentTypeText}>
-                  {Labels.Shipment_Type}
+                  {label.shipmentType}
                 </Text>
                 <View
                   style={[
@@ -56,7 +58,7 @@ const MyDelivery = () => {
                   </View>
                   <View>
                     <Text style={MyDeliveryStyle.detailHeader}>
-                      {Labels.PickUp_Date}
+                      {label.pickUpDate}
                     </Text>
                     <Text style={MyDeliveryStyle.detailSubtext}>
                       {item.pickUpDate}
@@ -73,7 +75,7 @@ const MyDelivery = () => {
                   </View>
                   <View>
                     <Text style={MyDeliveryStyle.detailHeader}>
-                      {Labels.PickUp_Time}
+                      {label.pickUpTime}
                     </Text>
                     <Text style={MyDeliveryStyle.detailSubtext}>
                       {item.pickUpTime}
@@ -89,7 +91,7 @@ const MyDelivery = () => {
                   })
                 }>
                 <Text style={MyDeliveryStyle.viewDetailsText}>
-                  {Labels.View_Details}
+                  {label.viewDetails}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -101,7 +103,7 @@ const MyDelivery = () => {
 
   return (
     <View style={MyDeliveryStyle.container}>
-      <Header header={Labels.My_Delivery} />
+      <Header header={label.myDelivery} />
       {Delivery()}
     </View>
   );
