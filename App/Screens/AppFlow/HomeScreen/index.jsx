@@ -21,6 +21,7 @@ import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
 import {language} from '../../../Redux/Actions/authAction';
 import {useLabels} from '../../../Helper/ReduxLabels';
+import Loader from '../../../Helper/Loader';
 // import RNRestart from 'react-native-restart';
 
 const HomeScreen = () => {
@@ -30,6 +31,7 @@ const HomeScreen = () => {
   const selectedLanguage = useSelector(
     state => state.language.selectedLanguage,
   );
+  const {loading} = useSelector(state => state.language_id);
   console.log('selectedLanguage', selectedLanguage);
   const [countryModalVisible, setCountryModalVisible] = useState(false);
   const [logoutModalVisible, setLogoutModalVisible] = useState(false);
@@ -41,28 +43,28 @@ const HomeScreen = () => {
   const ShipmentData = [
     {
       id: 1,
-      label: label.deliveriesAssigned,
+      label: label?.deliveriesAssigned,
       count: 10,
       status: Images.icon1,
       bgColor: '#DBF2FF',
     },
     {
       id: 2,
-      label: label.completedDeliveries,
+      label: label?.completedDeliveries,
       count: '06',
       status: Images.icon2,
       bgColor: '#DDF3E6',
     },
     {
       id: 3,
-      label: label.pendingDeliveries,
+      label: label?.pendingDeliveries,
       count: '01',
       status: Images.icon3,
       bgColor: '#FFF6D8',
     },
     {
       id: 4,
-      label: label.delayedDeliveries,
+      label: label?.delayedDeliveries,
       count: '03',
       status: Images.icon4,
       bgColor: '#FFEDED',
@@ -322,14 +324,14 @@ const HomeScreen = () => {
     );
   };
 
-  return (
+  return loading ? (
+    <Loader />
+  ) : (
     <View
       style={{backgroundColor: Colors.White, flex: 1, marginTop: Scale(20)}}>
       <StatusBar
         backgroundColor={
-          countryModalVisible || logoutModalVisible === true
-            ? '#36393C99'
-            : Colors.White
+          countryModalVisible || logoutModalVisible ? '#36393C99' : Colors.White
         }
         barStyle={'dark-content'}
       />

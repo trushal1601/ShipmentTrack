@@ -1,4 +1,11 @@
-import {StatusBar, StyleSheet, Text, TextInput, View} from 'react-native';
+import {
+  ActivityIndicator,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
 import React from 'react';
 import {Colors, Fonts} from '../../../Assets/Assets';
 import {Labels} from '../../../Assets/Labels';
@@ -7,12 +14,17 @@ import Scale from '../../../Helper/Responsive';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 import LoginStyle from './LoginStyle';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {loginUser} from '../../../Redux/Features/UserSlice';
 import {useLabels} from '../../../Helper/ReduxLabels';
+import Loader from '../../../Helper/Loader';
+
 // import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Login = ({navigation}) => {
+  const {loading} = useSelector(state => state.language_id);
+  console.log(loading);
+
   const dispatch = useDispatch();
   const label = useLabels();
   const validationSchema = Yup.object().shape({
@@ -35,44 +47,54 @@ const Login = ({navigation}) => {
   };
 
   return (
-    <Formik
-      initialValues={{email: ''}}
-      validationSchema={validationSchema}
-      onSubmit={values => {
-        navigation.navigate('OTPVerify', {email: values.email});
-        dispatch(loginUser(values.email));
-        // AsyncStorage.setItem('email', values.email);
-      }}>
-      {({handleChange, handleBlur, handleSubmit, values, errors, touched}) => (
-        <View style={LoginStyle.container}>
-          <StatusBar backgroundColor={Colors.White} barStyle={'dark-content'} />
-          <View style={LoginStyle.innerContainer}>
-            {Header()}
-            <Text style={LoginStyle.labelText}>{label?.email}</Text>
-            <TextInput
-              placeholder="Enter email"
-              placeholderTextColor={Colors.Grey200}
-              style={LoginStyle.textInput}
-              onChangeText={handleChange('email')}
-              onBlur={handleBlur('email')}
-              value={values.email}
-            />
-            {touched.email && errors.email && (
-              <Text style={LoginStyle.errorText}>{errors.email}</Text>
-            )}
-            <Text style={LoginStyle.infoText}>{label?.recievedEmail}</Text>
-            <View style={LoginStyle.buttonContainer}>
-              <ActionButton
-                value={label?.login}
-                onPress={handleSubmit}
-                disabled={!values.email || !!errors.email}
-                style={{}}
+    <View style={LoginStyle.container}>
+      <StatusBar backgroundColor={Colors.White} barStyle={'dark-content'} />
+      {loading ? (
+       <Loader/>
+      ) : (
+        <Formik
+          initialValues={{email: ''}}
+          validationSchema={validationSchema}
+          onSubmit={values => {
+            navigation.navigate('OTPVerify', {email: values.email});
+            dispatch(loginUser(values.email));
+          }}>
+          {({
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            values,
+            errors,
+            touched,
+          }) => (
+            <View style={LoginStyle.innerContainer}>
+              {Header()}
+              <Text style={LoginStyle.labelText}>{label?.email}</Text>
+              <TextInput
+                placeholder="Enter email"
+                placeholderTextColor={Colors.Grey200}
+                style={LoginStyle.textInput}
+                onChangeText={handleChange('email')}
+                onBlur={handleBlur('email')}
+                value={values.email}
               />
+              {touched.email && errors.email && (
+                <Text style={LoginStyle.errorText}>{errors.email}</Text>
+              )}
+              <Text style={LoginStyle.infoText}>{label?.recievedEmail}</Text>
+              <View style={LoginStyle.buttonContainer}>
+                <ActionButton
+                  value={label?.login}
+                  onPress={handleSubmit}
+                  disabled={!values.email || !!errors.email}
+                  style={{}}
+                />
+              </View>
             </View>
-          </View>
-        </View>
+          )}
+        </Formik>
       )}
-    </Formik>
+    </View>
   );
 };
 

@@ -4,8 +4,8 @@ import axios from 'axios';
 export const language_id = createAsyncThunk(
   'language/language_id',
   async language_id => {
-    console.log("language_id",language_id);
-    
+    console.log('language_id', language_id);
+
     const request = await axios.post(
       `https://shipmentdelivery.vrinsoft.in/api/v1/labels`,
       language_id,
