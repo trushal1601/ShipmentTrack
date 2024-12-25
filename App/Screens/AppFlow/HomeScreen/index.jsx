@@ -248,7 +248,7 @@ const HomeScreen = () => {
         onPress={() => {
           setLogoutModalVisible(true);
         }}>
-        <Text style={HomeScreenStyle.logoutText}>{label.logout}</Text>
+        <Text style={HomeScreenStyle.logoutText}>{label?.logout}</Text>
       </TouchableOpacity>
     );
   };

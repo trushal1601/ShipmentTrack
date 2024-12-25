@@ -33,8 +33,6 @@ const languageSlice = createSlice({
         state.loading = false;
         state.selectedLanguage = action.payload;
         console.log('hfdjsfbj', state.selectedLanguage);
-
-        // toast.success(action.payload.message);
         state.error = null;
       })
       .addCase(language_id.rejected, (state, action) => {

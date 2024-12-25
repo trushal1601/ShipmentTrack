@@ -18,13 +18,12 @@ import {useDispatch, useSelector} from 'react-redux';
 import {loginUser} from '../../../Redux/Features/UserSlice';
 import {useLabels} from '../../../Helper/ReduxLabels';
 import Loader from '../../../Helper/Loader';
+import {setEmail} from '../../../Redux/Features/EmailSlice';
 
 // import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Login = ({navigation}) => {
   const {loading} = useSelector(state => state.language_id);
-  console.log(loading);
-
   const dispatch = useDispatch();
   const label = useLabels();
   const validationSchema = Yup.object().shape({
@@ -50,14 +49,15 @@ const Login = ({navigation}) => {
     <View style={LoginStyle.container}>
       <StatusBar backgroundColor={Colors.White} barStyle={'dark-content'} />
       {loading ? (
-       <Loader/>
+        <Loader />
       ) : (
         <Formik
           initialValues={{email: ''}}
           validationSchema={validationSchema}
           onSubmit={values => {
             navigation.navigate('OTPVerify', {email: values.email});
-            dispatch(loginUser(values.email));
+            // dispatch(loginUser(values.email));
+            dispatch(setEmail(values.email));
           }}>
           {({
             handleChange,

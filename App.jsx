@@ -5,7 +5,7 @@ import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import MainNavigator from './App/Navigator/MainNavigator';
 import {Provider} from 'react-redux';
 import {persistor, store} from './App/Redux/Store';
-import {PersistGate} from 'redux-persist/integration/react';
+import { PersistGate } from 'redux-persist/integration/react';
 
 
 const App = () => {
@@ -17,11 +17,11 @@ const App = () => {
   }, []);
   return (
     <Provider store={store}>
-      {/* <PersistGate persistor={persistor}> */}
+      <PersistGate loading={null} persistor={persistor}>
       <GestureHandlerRootView>
         <MainNavigator />
       </GestureHandlerRootView>
-      {/* </PersistGate> */}
+      </PersistGate>
       </Provider>
   );
 };
