@@ -22,6 +22,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {language} from '../../../Redux/Actions/authAction';
 import {useLabels} from '../../../Helper/ReduxLabels';
 import Loader from '../../../Helper/Loader';
+import {language_id} from '../../../Redux/Features/LanguageSlice';
 // import RNRestart from 'react-native-restart';
 
 const HomeScreen = () => {
@@ -37,8 +38,8 @@ const HomeScreen = () => {
   const [logoutModalVisible, setLogoutModalVisible] = useState(false);
   const [selectedItem, setSelectedItem] = useState(selectedLanguage?.icon);
   const [selected, setSelected] = useState(selectedLanguage?.icon);
-  const refCountryRBSheet = useRef();
-  const refLogoutRBSheet = useRef();
+  const refCountryRBSheet = useRef(null);
+  const refLogoutRBSheet = useRef(null);
 
   const ShipmentData = [
     {
@@ -77,17 +78,17 @@ const HomeScreen = () => {
 
   useEffect(() => {
     if (countryModalVisible) {
-      refCountryRBSheet.current.open();
+      refCountryRBSheet.current?.open();
     } else {
-      refCountryRBSheet.current.close();
+      refCountryRBSheet.current?.close();
     }
   }, [countryModalVisible]);
 
   useEffect(() => {
     if (logoutModalVisible) {
-      refLogoutRBSheet.current.open();
+      refLogoutRBSheet.current?.open();
     } else {
-      refLogoutRBSheet.current.close();
+      refLogoutRBSheet.current?.close();
     }
   }, [logoutModalVisible]);
 
@@ -328,7 +329,7 @@ const HomeScreen = () => {
     <Loader />
   ) : (
     <View
-      style={{backgroundColor: Colors.White, flex: 1, marginTop: Scale(20)}}>
+      style={{backgroundColor: Colors.White, flex: 1}}>
       <StatusBar
         backgroundColor={
           countryModalVisible || logoutModalVisible ? '#36393C99' : Colors.White

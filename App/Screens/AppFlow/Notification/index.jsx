@@ -1,4 +1,4 @@
-import {FlatList, Image, Text, View} from 'react-native';
+import {FlatList, Image, StatusBar, Text, View} from 'react-native';
 import React from 'react';
 import {Images} from '../../../Assets/Assets';
 import {Header} from '../../../Components/Component';
@@ -31,6 +31,7 @@ const Notification = () => {
   };
   return (
     <View style={NotificationStyle.container}>
+      <StatusBar backgroundColor={Colors.White} barStyle={'dark-content'} />
       <Header header={label.notification} />
       {Notify()}
     </View>

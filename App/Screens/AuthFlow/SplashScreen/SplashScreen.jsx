@@ -4,14 +4,35 @@ import {Colors, Images} from '../../../Assets/Assets';
 import ChooseLanguage from '../ChooseLanguage';
 import {useDispatch, useSelector} from 'react-redux';
 import {language_id} from '../../../Redux/Features/LanguageSlice';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
+import Loader from '../../../Helper/Loader';
 
 const SplashScreen = () => {
+  const navigation = useNavigation();
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(true);
   const [isVisible, setIsVisible] = useState(true);
   const selectedLanguage = useSelector(
     state => state.language.selectedLanguage,
   );
   console.log('selectedLanguage', selectedLanguage);
+  const {emails} = useSelector(state => state.email);
+
+  useFocusEffect(() => {
+    const checkEmail = async () => {
+      try {
+        if (emails) {
+          navigation.navigate('home', {email: emails});
+        }
+      } catch (error) {
+        Alert.alert('Error', 'Failed to retrieve email.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    checkEmail();
+  }, [emails, navigation]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -31,6 +52,10 @@ const SplashScreen = () => {
 
   if (!isVisible) {
     return <ChooseLanguage />;
+  }
+
+  if (loading) {
+    return <Loader />;
   }
 
   return (

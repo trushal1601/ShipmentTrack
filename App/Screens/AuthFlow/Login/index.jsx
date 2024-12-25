@@ -20,8 +20,6 @@ import {useLabels} from '../../../Helper/ReduxLabels';
 import Loader from '../../../Helper/Loader';
 import {setEmail} from '../../../Redux/Features/EmailSlice';
 
-// import AsyncStorage from '@react-native-async-storage/async-storage';
-
 const Login = ({navigation}) => {
   const {loading} = useSelector(state => state.language_id);
   const dispatch = useDispatch();

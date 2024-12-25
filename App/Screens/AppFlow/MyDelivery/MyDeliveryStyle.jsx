@@ -6,7 +6,6 @@ export default StyleSheet.create({
   container: {
     backgroundColor: Colors.White,
     flex: 1,
-    marginTop:Scale(23)
   },
   flatListContent: {
     paddingHorizontal: Scale(18),

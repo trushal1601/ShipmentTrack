@@ -3,7 +3,7 @@ import {Colors, Fonts} from '../../../Assets/Assets';
 import Scale from '../../../Helper/Responsive';
 
 export default StyleSheet.create({
-  container: {backgroundColor: Colors.White, flex: 1, marginTop: Scale(23)},
+  container: {backgroundColor: Colors.White, flex: 1},
   headerText: {
     fontFamily: Fonts.proximanova_bold,
     color: Colors.Grey400,

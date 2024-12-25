@@ -1,6 +1,7 @@
 import {
   FlatList,
   Image,
+  StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -56,7 +57,10 @@ const MyDelivery = () => {
                       tintColor={'#666666'}
                     />
                   </View>
-                  <View>
+                  <View
+                    style={{
+                      flex: 1,
+                    }}>
                     <Text style={MyDeliveryStyle.detailHeader}>
                       {label.pickUpDate}
                     </Text>
@@ -73,7 +77,7 @@ const MyDelivery = () => {
                       tintColor={'#666666'}
                     />
                   </View>
-                  <View>
+                  <View style={{flex: 1}}>
                     <Text style={MyDeliveryStyle.detailHeader}>
                       {label.pickUpTime}
                     </Text>
@@ -103,6 +107,7 @@ const MyDelivery = () => {
 
   return (
     <View style={MyDeliveryStyle.container}>
+      <StatusBar backgroundColor={Colors.White} barStyle={'dark-content'} />
       <Header header={label.myDelivery} />
       {Delivery()}
     </View>

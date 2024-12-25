@@ -6,7 +6,6 @@ export default StyleSheet.create({
   container: {
     backgroundColor: Colors.White,
     flex: 1,
-    marginTop: Scale(22),
   },
   notificationItem: {
     backgroundColor: Colors.contentBg,
