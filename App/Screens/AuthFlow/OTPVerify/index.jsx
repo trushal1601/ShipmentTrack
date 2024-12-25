@@ -118,9 +118,9 @@ const OTPVerify = ({route, initialSeconds = 60}) => {
 
           <View style={OTPVerifyStyle.innerContainer}>
             <Text style={OTPVerifyStyle.headerText}>
-              {label.otpVarification}
+              {label?.otpVarification}
             </Text>
-            <Text style={OTPVerifyStyle.bioText}>{label.otpSomeword}</Text>
+            <Text style={OTPVerifyStyle.bioText}>{label?.otpSomeword}</Text>
             {Email()}
             {OTPFill()}
             {touched.otp && errors.otp && (
@@ -144,7 +144,7 @@ const OTPVerify = ({route, initialSeconds = 60}) => {
               </Text>
             )}
             <ActionButton
-              value={label.verify}
+              value={label?.verify}
               disabled={otp.length < CELL_COUNT || !!errors.otp}
               onPress={() => navigation.navigate('home')}
               style={OTPVerifyStyle.verifyButton}

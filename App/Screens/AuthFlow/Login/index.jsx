@@ -19,17 +19,17 @@ const Login = ({navigation}) => {
     email: Yup.string()
       .matches(
         /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-        label.email_valid,
+        label?.email_valid,
       )
-      .email(label.email_valid)
+      .email(label?.email_valid)
       .required('Email is required'),
   });
 
   const Header = () => {
     return (
       <View>
-        <Text style={LoginStyle.headerText}>{label.LetsGetStarted}</Text>
-        <Text style={LoginStyle.bioText}>{label.LoginSlogan}</Text>
+        <Text style={LoginStyle.headerText}>{label?.LetsGetStarted}</Text>
+        <Text style={LoginStyle.bioText}>{label?.LoginSlogan}</Text>
       </View>
     );
   };
@@ -48,7 +48,7 @@ const Login = ({navigation}) => {
           <StatusBar backgroundColor={Colors.White} barStyle={'dark-content'} />
           <View style={LoginStyle.innerContainer}>
             {Header()}
-            <Text style={LoginStyle.labelText}>{label.email}</Text>
+            <Text style={LoginStyle.labelText}>{label?.email}</Text>
             <TextInput
               placeholder="Enter email"
               placeholderTextColor={Colors.Grey200}
@@ -60,10 +60,10 @@ const Login = ({navigation}) => {
             {touched.email && errors.email && (
               <Text style={LoginStyle.errorText}>{errors.email}</Text>
             )}
-            <Text style={LoginStyle.infoText}>{label.recievedEmail}</Text>
+            <Text style={LoginStyle.infoText}>{label?.recievedEmail}</Text>
             <View style={LoginStyle.buttonContainer}>
               <ActionButton
-                value={label.login}
+                value={label?.login}
                 onPress={handleSubmit}
                 disabled={!values.email || !!errors.email}
                 style={{}}

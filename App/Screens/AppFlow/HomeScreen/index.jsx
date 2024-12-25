@@ -34,6 +34,7 @@ const HomeScreen = () => {
   const [countryModalVisible, setCountryModalVisible] = useState(false);
   const [logoutModalVisible, setLogoutModalVisible] = useState(false);
   const [selectedItem, setSelectedItem] = useState(selectedLanguage?.icon);
+  const [selected, setSelected] = useState(selectedLanguage?.icon);
   const refCountryRBSheet = useRef();
   const refLogoutRBSheet = useRef();
 
@@ -109,9 +110,11 @@ const HomeScreen = () => {
 
   const handlePress = item => {
     setSelectedItem(item.id);
-    dispatch(language(item));
+    setSelected(item);
   };
   const handlePressDone = () => {
+    setSelectedItem(selected.id);
+    dispatch(language(selected));
     setCountryModalVisible(false);
   };
 

@@ -27,6 +27,7 @@ const ChooseLanguage = () => {
 
   const navigation = useNavigation();
   const [selectedItem, setSelectedItem] = useState();
+  const [selected, setSelected] = useState();
 
   useEffect(() => {
     StatusBar.setBarStyle('dark-content');
@@ -41,7 +42,7 @@ const ChooseLanguage = () => {
 
   const handlePress = (item, setFieldValue) => {
     setSelectedItem(item.id);
-    dispatch(language(item));
+    setSelected(item);
     setFieldValue('language', item.id);
   };
 
@@ -59,6 +60,8 @@ const ChooseLanguage = () => {
       initialValues={{language: ''}}
       validationSchema={validationSchema}
       onSubmit={values => {
+        dispatch(language(selected));
+
         navigation.navigate('loginScreen');
       }}>
       {({handleSubmit, setFieldValue, errors, touched}) => (
