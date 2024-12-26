@@ -33,7 +33,7 @@ const HomeScreen = () => {
     state => state.language.selectedLanguage,
   );
   const {loading} = useSelector(state => state.language_id);
-  console.log('selectedLanguage', selectedLanguage);
+  // console.log('selectedLanguage', selectedLanguage);
   const [countryModalVisible, setCountryModalVisible] = useState(false);
   const [logoutModalVisible, setLogoutModalVisible] = useState(false);
   const [selectedItem, setSelectedItem] = useState(selectedLanguage?.icon);

@@ -30,23 +30,7 @@ const ChooseLanguage = () => {
   const dispatch = useDispatch();
   const { emails } = useSelector(state => state.email);
   const navigation = useNavigation(); 
-  console.log('asa', emails);
-
-  // useEffect(() => {
-  //   const checkEmail = async () => {
-  //     try {
-  //       if (emails) {
-  //         navigation.navigate('home', { email: emails });
-  //       }
-  //     } catch (error) {
-  //       Alert.alert('Error', 'Failed to retrieve email.');
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-
-  //   checkEmail();
-  // }, [emails, navigation]);
+ 
 
   const [selectedItem, setSelectedItem] = useState();
   const [selected, setSelected] = useState();

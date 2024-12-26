@@ -15,15 +15,14 @@ import {Formik} from 'formik';
 import * as Yup from 'yup';
 import LoginStyle from './LoginStyle';
 import {useDispatch, useSelector} from 'react-redux';
-import {loginUser} from '../../../Redux/Features/UserSlice';
 import {useLabels} from '../../../Helper/ReduxLabels';
 import Loader from '../../../Helper/Loader';
-import {setEmail} from '../../../Redux/Features/EmailSlice';
+import {login} from '../../../Redux/Features/LanguageSlice';
 
 const Login = ({navigation}) => {
-  const {loading} = useSelector(state => state.language_id);
   const dispatch = useDispatch();
   const label = useLabels();
+  const {loading} = useSelector(state => state.language_id);
   const validationSchema = Yup.object().shape({
     email: Yup.string()
       .matches(
@@ -53,9 +52,8 @@ const Login = ({navigation}) => {
           initialValues={{email: ''}}
           validationSchema={validationSchema}
           onSubmit={values => {
-            navigation.navigate('OTPVerify', {email: values.email});
-            // dispatch(loginUser(values.email));
-            dispatch(setEmail(values.email));
+            dispatch(login({email: values.email, fcm_token: 'string'}));
+            navigation.navigate('OTPVerify', {fcm_token: 'string'});
           }}>
           {({
             handleChange,
@@ -80,9 +78,7 @@ const Login = ({navigation}) => {
                 <Text style={LoginStyle.errorText}>{errors.email}</Text>
               )}
               {values.email && !errors.email ? (
-                <Text style={LoginStyle.infoText}>
-                  {label?.recievedEmail}
-                </Text>
+                <Text style={LoginStyle.infoText}>{label?.recievedEmail}</Text>
               ) : null}
               <View style={LoginStyle.buttonContainer}>
                 <ActionButton

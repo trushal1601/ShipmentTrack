@@ -47,7 +47,7 @@ export default StyleSheet.create({
     fontFamily: Fonts.proximanova_bold,
   },
   errorText: {
-    color: Colors.Red,
+    color: 'red',
     fontFamily: Fonts.proximanova_regular,
     marginTop: Scale(10),
   },

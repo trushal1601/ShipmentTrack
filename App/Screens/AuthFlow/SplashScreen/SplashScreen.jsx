@@ -15,7 +15,7 @@ const SplashScreen = () => {
   const selectedLanguage = useSelector(
     state => state.language.selectedLanguage,
   );
-  console.log('selectedLanguage', selectedLanguage);
+  // console.log('selectedLanguage', selectedLanguage);
   const {emails} = useSelector(state => state.email);
 
   useFocusEffect(() => {

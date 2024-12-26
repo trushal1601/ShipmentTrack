@@ -1,4 +1,5 @@
 import {
+  Alert,
   Image,
   Pressable,
   StatusBar,
@@ -24,11 +25,20 @@ import {
 import {useNavigation} from '@react-navigation/native';
 import OTPVerifyStyle from './OTPVerifyStyle';
 import {useLabels} from '../../../Helper/ReduxLabels';
+import {useDispatch, useSelector} from 'react-redux';
+import Loader from '../../../Helper/Loader';
+import {verifyOTP} from '../../../Redux/Features/LanguageSlice';
+import {setEmail} from '../../../Redux/Features/EmailSlice';
 
 const OTPVerify = ({route, initialSeconds = 120}) => {
+  const dispatch = useDispatch();
+  const {otpVerifyLoading} = useSelector(state => state.language_id);
   const label = useLabels();
   const navigation = useNavigation();
-  const {email} = route.params;
+  const {fcm_token} = route.params;
+  const {loginEmail} = useSelector(state => state.language_id);
+  // const {token} = useSelector(state => state.language_id);
+  // console.log('demo1', token?.Token);
   const [otp, setOtp] = useState('');
   const [isOtpExpired, setIsOtpExpired] = useState(false);
   const CELL_COUNT = 4;
@@ -63,96 +73,145 @@ const OTPVerify = ({route, initialSeconds = 120}) => {
     setIsOtpExpired(false);
     // Add resend OTP logic here
   };
+
   const Email = () => {
     return (
       <View style={OTPVerifyStyle.emailContainer}>
         <Image source={Images.mail_icon} style={OTPVerifyStyle.mailIcon} />
-        <Text style={OTPVerifyStyle.emailText}>{email}</Text>
+        <Text style={OTPVerifyStyle.emailText}>{loginEmail?.email}</Text>
       </View>
     );
   };
 
-  const OTPFill = () => {
-    return (
-      <>
-        <CodeField
-          ref={ref}
-          {...props}
-          value={otp}
-          onChangeText={setOtp}
-          cellCount={CELL_COUNT}
-          rootStyle={OTPVerifyStyle.codeFieldRoot}
-          keyboardType="number-pad"
-          textContentType="oneTimeCode"
-          renderCell={({index, symbol, isFocused}) => (
-            <View
-              onLayout={getCellOnLayoutHandler(index)}
-              key={index}
-              style={[
-                OTPVerifyStyle.cell,
-                isFocused && OTPVerifyStyle.focusCell,
-              ]}>
-              <Text style={OTPVerifyStyle.cellText}>
-                {symbol || (isFocused ? <Cursor /> : null)}
-              </Text>
-            </View>
-          )}
-        />
-        {/* <Text>{label.otp_valid}</Text> */}
-      </>
-    );
+  const handleOtpVerification = async (
+    enteredOtp,
+    setSubmitting,
+    navigation,
+  ) => {
+    try {
+      if (enteredOtp === loginEmail?.otp) {
+        console.log('OTP verification successful');
+        const response = await dispatch(
+          verifyOTP({email: loginEmail.email, fcm_token, otp: enteredOtp}),
+        );
+        const token = response?.data?.token;
+        await dispatch(
+          setEmail({
+            email: loginEmail.email,
+            fcm_token,
+            otp: enteredOtp,
+            token,
+          }),
+        );
+        console.log('OTP verified and email set successfully.');
+
+        navigation.navigate('home');
+      } else {
+        console.log('OTP verification failed');
+        Alert.alert('Invalid OTP. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error verifying OTP and setting email:', error);
+      Alert.alert('Error verifying OTP. Please try again.');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
-    <Formik
-      initialValues={{otp: ''}}
-      validationSchema={validationSchema}
-      onSubmit={values => {
-        console.log(values);
-      }}>
-      {({handleChange, handleBlur, handleSubmit, values, errors, touched}) => (
-        <View style={OTPVerifyStyle.container}>
-          <StatusBar backgroundColor={Colors.White} barStyle={'dark-content'} />
-          <Header />
+    <>
+      {otpVerifyLoading ? (
+        <Loader />
+      ) : (
+        <Formik
+          initialValues={{otp: ''}}
+          validationSchema={validationSchema}
+          onSubmit={async (values, {setSubmitting}) => {
+            handleOtpVerification(values.otp, setSubmitting, navigation);
+          }}>
+          {({
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            values,
+            errors,
+            touched,
+          }) => (
+            <View style={OTPVerifyStyle.container}>
+              <StatusBar
+                backgroundColor={Colors.White}
+                barStyle={'dark-content'}
+              />
+              <Header />
+              <View style={OTPVerifyStyle.innerContainer}>
+                <Text style={OTPVerifyStyle.headerText}>
+                  {label?.otpVarification}
+                </Text>
+                <Text style={OTPVerifyStyle.bioText}>{label?.otpSomeword}</Text>
+                {Email()}
+                <CodeField
+                  ref={ref}
+                  {...props}
+                  value={otp}
+                  onChangeText={text => {
+                    setOtp(text);
+                    handleChange('otp')(text);
+                  }}
+                  cellCount={CELL_COUNT}
+                  rootStyle={OTPVerifyStyle.codeFieldRoot}
+                  keyboardType="number-pad"
+                  textContentType="oneTimeCode"
+                  renderCell={({index, symbol, isFocused}) => (
+                    <View
+                      onLayout={getCellOnLayoutHandler(index)}
+                      key={index}
+                      style={[
+                        OTPVerifyStyle.cell,
+                        isFocused && OTPVerifyStyle.focusCell,
+                      ]}>
+                      <Text style={OTPVerifyStyle.cellText}>
+                        {symbol || (isFocused ? <Cursor /> : null)}
+                      </Text>
+                    </View>
+                  )}
+                />
 
-          <View style={OTPVerifyStyle.innerContainer}>
-            <Text style={OTPVerifyStyle.headerText}>
-              {label?.otpVarification}
-            </Text>
-            <Text style={OTPVerifyStyle.bioText}>{label?.otpSomeword}</Text>
-            {Email()}
-            {OTPFill()}
-            {touched.otp && errors.otp && (
-              <Text style={OTPVerifyStyle.errorText}>{errors.otp}</Text>
-            )}
-            {isOtpExpired ? (
-              <View style={OTPVerifyStyle.expiredContainer}>
-                <Text style={OTPVerifyStyle.invalidOtpText}>
-                  {label.aheadMessage}
-                </Text>
-                <Pressable onPress={handleResend}>
-                  <Text style={OTPVerifyStyle.resendText}>{label.resend}</Text>
-                </Pressable>
+                {touched.otp && errors.otp && (
+                  <Text style={OTPVerifyStyle.errorText}>{errors.otp}</Text>
+                )}
+                {isOtpExpired ? (
+                  <View style={OTPVerifyStyle.expiredContainer}>
+                    <Text style={OTPVerifyStyle.invalidOtpText}>
+                      {label.aheadMessage}
+                    </Text>
+                    <Pressable onPress={handleResend}>
+                      <Text style={OTPVerifyStyle.resendText}>
+                        {label.resend}
+                      </Text>
+                    </Pressable>
+                  </View>
+                ) : (
+                  <Text
+                    style={{
+                      fontSize: Scale(14),
+                      marginTop: Scale(10),
+                      fontFamily: Fonts.proximanova_bold,
+                    }}>
+                    Your OTP is : {loginEmail?.otp}
+                  </Text>
+                )}
+                <ActionButton
+                  value={label?.verify}
+                  disabled={otp.length < CELL_COUNT || !!errors.otp}
+                  onPress={handleSubmit}
+                  style={OTPVerifyStyle.verifyButton}
+                />
               </View>
-            ) : (
-              <Text style={OTPVerifyStyle.resendCountdown}>
-                {label.resendcodein}
-                {':  '}
-                <Text style={OTPVerifyStyle.resendTime}>
-                  {formatTime(seconds)}
-                </Text>
-              </Text>
-            )}
-            <ActionButton
-              value={label?.verify}
-              disabled={otp.length < CELL_COUNT || !!errors.otp}
-              onPress={() => navigation.navigate('home')}
-              style={OTPVerifyStyle.verifyButton}
-            />
-          </View>
-        </View>
+            </View>
+          )}
+        </Formik>
       )}
-    </Formik>
+    </>
   );
 };
 
