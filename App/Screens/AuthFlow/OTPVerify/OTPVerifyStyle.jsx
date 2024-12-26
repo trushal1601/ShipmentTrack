@@ -44,7 +44,7 @@ export default StyleSheet.create({
     color: Colors.Grey400,
     textAlign: 'center',
     marginTop: Scale(16),
-    fontFamily:Fonts.proximanova_bold
+    fontFamily: Fonts.proximanova_bold,
   },
   errorText: {
     color: Colors.Red,
@@ -56,6 +56,7 @@ export default StyleSheet.create({
     fontFamily: Fonts.proximanova_bold,
     textAlign: 'center',
     textDecorationLine: 'underline',
+    fontSize: Scale(14),
   },
   backIcon: {
     alignSelf: 'flex-start',
@@ -85,9 +86,10 @@ export default StyleSheet.create({
     marginTop: Scale(10),
   },
   invalidOtpText: {
-    color: Colors.Grey200,
+    color: Colors.Grey400,
     fontFamily: Fonts.proximanova_regular,
     marginRight: Scale(5),
+    fontSize: Scale(14),
   },
   resendCountdown: {
     color: Colors.Grey200,

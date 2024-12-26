@@ -23,7 +23,7 @@ import {language} from '../../../Redux/Actions/authAction';
 import {useLabels} from '../../../Helper/ReduxLabels';
 import Loader from '../../../Helper/Loader';
 import {language_id} from '../../../Redux/Features/LanguageSlice';
-// import RNRestart from 'react-native-restart';
+import RNRestart from 'react-native-restart';
 
 const HomeScreen = () => {
   const dispatch = useDispatch();
@@ -73,7 +73,7 @@ const HomeScreen = () => {
   ];
 
   const handleLogout = () => {
-    // RNRestart.Restart();
+    RNRestart.Restart();
   };
 
   useEffect(() => {

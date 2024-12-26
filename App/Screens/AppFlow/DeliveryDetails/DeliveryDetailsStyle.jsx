@@ -21,7 +21,6 @@ export default StyleSheet.create({
     backgroundColor: Colors.contentBg,
     borderRadius: Scale(9),
     marginTop: Scale(15),
-    paddingHorizontal: Scale(18),
   },
   itemHeader: {flexDirection: 'row', alignItems: 'center', gap: Scale(15)},
   shipmentTypeText: {
@@ -74,7 +73,7 @@ export default StyleSheet.create({
     backgroundColor: Colors.contentBg,
     borderRadius: Scale(9),
     marginTop: Scale(15),
-    paddingHorizontal: Scale(18),
+    // paddingHorizontal: Scale(18),
   },
   shipInfo1: {
     flexDirection: 'row',
@@ -90,7 +89,6 @@ export default StyleSheet.create({
     backgroundColor: Colors.imgBg,
     padding: Scale(8),
     borderRadius: Scale(5),
-    alignSelf: 'flex-start',
   },
   icon: {height: Scale(15), width: Scale(15)},
   pickUpText: {

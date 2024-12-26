@@ -1,4 +1,4 @@
-import {Image, StatusBar, StyleSheet, Text, View} from 'react-native';
+import {Alert, Image, StatusBar, StyleSheet, Text, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {Colors, Images} from '../../../Assets/Assets';
 import ChooseLanguage from '../ChooseLanguage';
@@ -48,7 +48,7 @@ const SplashScreen = () => {
     } else {
       dispatch(language_id({language_id: 1}));
     }
-  });
+  }, [selectedLanguage]);
 
   if (!isVisible) {
     return <ChooseLanguage />;

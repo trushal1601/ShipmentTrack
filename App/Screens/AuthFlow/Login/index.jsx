@@ -79,7 +79,11 @@ const Login = ({navigation}) => {
               {touched.email && errors.email && (
                 <Text style={LoginStyle.errorText}>{errors.email}</Text>
               )}
-              <Text style={LoginStyle.infoText}>{label?.recievedEmail}</Text>
+              {values.email && !errors.email ? (
+                <Text style={LoginStyle.infoText}>
+                  {label?.recievedEmail}
+                </Text>
+              ) : null}
               <View style={LoginStyle.buttonContainer}>
                 <ActionButton
                   value={label?.login}

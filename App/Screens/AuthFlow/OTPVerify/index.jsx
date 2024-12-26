@@ -25,7 +25,7 @@ import {useNavigation} from '@react-navigation/native';
 import OTPVerifyStyle from './OTPVerifyStyle';
 import {useLabels} from '../../../Helper/ReduxLabels';
 
-const OTPVerify = ({route, initialSeconds = 60}) => {
+const OTPVerify = ({route, initialSeconds = 120}) => {
   const label = useLabels();
   const navigation = useNavigation();
   const {email} = route.params;
@@ -113,7 +113,6 @@ const OTPVerify = ({route, initialSeconds = 60}) => {
       {({handleChange, handleBlur, handleSubmit, values, errors, touched}) => (
         <View style={OTPVerifyStyle.container}>
           <StatusBar backgroundColor={Colors.White} barStyle={'dark-content'} />
-          {/* {backIcon()} */}
           <Header />
 
           <View style={OTPVerifyStyle.innerContainer}>
@@ -129,15 +128,16 @@ const OTPVerify = ({route, initialSeconds = 60}) => {
             {isOtpExpired ? (
               <View style={OTPVerifyStyle.expiredContainer}>
                 <Text style={OTPVerifyStyle.invalidOtpText}>
-                  Entered OTP is invalid or expired.
+                  {label.aheadMessage}
                 </Text>
                 <Pressable onPress={handleResend}>
-                  <Text style={OTPVerifyStyle.resendText}>Resend</Text>
+                  <Text style={OTPVerifyStyle.resendText}>{label.resend}</Text>
                 </Pressable>
               </View>
             ) : (
               <Text style={OTPVerifyStyle.resendCountdown}>
-                Resend code in{' '}
+                {label.resendcodein}
+                {':  '}
                 <Text style={OTPVerifyStyle.resendTime}>
                   {formatTime(seconds)}
                 </Text>

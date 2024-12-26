@@ -8,7 +8,7 @@ export default StyleSheet.create({
     flex: 1,
   },
   flatListContent: {
-    paddingHorizontal: Scale(18),
+    paddingHorizontal: Scale(13),
   },
   itemContainer: {
     backgroundColor: Colors.contentBg,

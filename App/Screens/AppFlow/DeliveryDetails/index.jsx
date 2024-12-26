@@ -104,7 +104,7 @@ const DeliveryDetails = ({route}) => {
           style={[
             DeliveryDetailsStyle.shipmentTypeBadge,
             {
-              backgroundColor: data.type === 'Regular' ? Colors.Green : 'red',
+              backgroundColor: data.type === 'Urgent' ?'red' : Colors.Green  ,
             },
           ]}>
           <Text style={DeliveryDetailsStyle.shipmentTypeLabel}>
@@ -167,7 +167,7 @@ const DeliveryDetails = ({route}) => {
               tintColor={'#666666'}
             />
           </View>
-          <View>
+          <View style={{flex:1}}>
             <Text style={DeliveryDetailsStyle.pickUpText}>
               {label.pickUpDate}
             </Text>
@@ -184,7 +184,7 @@ const DeliveryDetails = ({route}) => {
               tintColor={'#666666'}
             />
           </View>
-          <View>
+          <View style={{flex:1}}>
             <Text style={DeliveryDetailsStyle.pickUpText}>
               {label.pickUpTime}
             </Text>

@@ -12,6 +12,7 @@ import {
   WaveIndicator,
 } from 'react-native-indicators';
 import {Colors} from '../Assets/Assets';
+import Scale from './Responsive';
 
 const Loader = () => {
   return (
@@ -22,7 +23,7 @@ const Loader = () => {
         flex: 1,
         backgroundColor: Colors.White,
       }}>
-      <BarIndicator color={Colors.Primary} />
+      <BarIndicator color={Colors.Primary} size={Scale(25)} />
     </View>
   );
 };

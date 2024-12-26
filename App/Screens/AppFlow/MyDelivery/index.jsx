@@ -11,8 +11,6 @@ import React from 'react';
 import {Colors, Fonts, Images} from '../../../Assets/Assets';
 import {Header} from '../../../Components/Component';
 import {Labels} from '../../../Assets/Labels';
-import Scale from '../../../Helper/Responsive';
-import {DeliveryOrder} from '../../../Helper/JsonData';
 import MyDeliveryStyle from './MyDeliveryStyle';
 import {useNavigation} from '@react-navigation/native';
 import {useLabels} from '../../../Helper/ReduxLabels';
@@ -20,6 +18,74 @@ import {useLabels} from '../../../Helper/ReduxLabels';
 const MyDelivery = () => {
   const navigation = useNavigation();
   const label = useLabels();
+
+  const DeliveryOrder = [
+    {
+      id: 1,
+      type: label.regular,
+      pickUpDate: '24/07/2024',
+      pickUpTime: '05:10pm',
+      id: '#258413914346',
+      charge: '499',
+      pickUpLocation: '705,Elite Business House,Sola,Ahmedabad',
+      dropLocation: 'B-606,Satyamev Eminence,Science City Road,Sola,Ahmedabad',
+    },
+    {
+      id: 2,
+      type: Labels.Urgent,
+      pickUpDate: '24/07/2024',
+      pickUpTime: '07:15pm',
+      id: '#654713911257',
+      charge: '799',
+      pickUpLocation: 'B-606,Silver Radiance,Science City Road,Sola,Ahmedabad',
+      dropLocation:
+        'B-606,Empire Business Hub,Science City Road,Sola,Ahmedabad',
+    },
+    {
+      id: 3,
+      type: label.regular,
+      pickUpDate: '25/07/2024',
+      pickUpTime: '11:15am',
+      id: '#982113914346',
+      charge: '150',
+      pickUpLocation: '705,Elite Business House,Sola,Ahmedabad',
+      dropLocation: 'B-606,Satyamev Eminence,Science City Road,Sola,Ahmedabad',
+    },
+    {
+      id: 4,
+      type: label.regular,
+      pickUpDate: '25/07/2024',
+      pickUpTime: '01:10pm',
+      id: '#108313914346',
+      charge: '499',
+      pickUpLocation:
+        '1596 Cheriton Dr, Port Shepstone, KwaZulu-Natal, South Africa',
+      dropLocation:
+        '1857 St. John Street, Kleinmond, Western Cape, South Africa',
+    },
+    {
+      id: 5,
+      type: Labels.Urgent,
+      pickUpDate: '26/07/2024',
+      pickUpTime: '07:10am',
+      id: '#510813914346',
+      charge: '999',
+      pickUpLocation: '705,Elite Business House,Sola,Ahmedabad',
+      dropLocation: 'B-606,Satyamev Eminence,Science City Road,Sola,Ahmedabad',
+    },
+    {
+      id: 6,
+      type: label.regular,
+      pickUpDate: '26/07/2024',
+      pickUpTime: '03:10pm',
+      id: '#713913914346',
+      charge: '499',
+      pickUpLocation:
+        '1596 Cheriton Dr, Port Shepstone, KwaZulu-Natal, South Africa',
+      dropLocation:
+        '1857 St. John Street, Kleinmond, Western Cape, South Africa',
+    },
+  ];
 
   const Delivery = () => {
     return (
@@ -40,7 +106,7 @@ const MyDelivery = () => {
                     MyDeliveryStyle.shipmentTypeBadge,
                     {
                       backgroundColor:
-                        item.type === 'Regular' ? Colors.Green : 'red',
+                        item.type === 'Urgent' ? 'red' : Colors.Green,
                     },
                   ]}>
                   <Text style={MyDeliveryStyle.shipmentTypeLabel}>
