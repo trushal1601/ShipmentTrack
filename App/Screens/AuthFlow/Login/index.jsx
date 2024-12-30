@@ -6,7 +6,7 @@ import {
   TextInput,
   View,
 } from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 import {Colors, Fonts} from '../../../Assets/Assets';
 import {Labels} from '../../../Assets/Labels';
 import {ActionButton} from '../../../Components/Component';
@@ -23,6 +23,8 @@ const Login = ({navigation}) => {
   const dispatch = useDispatch();
   const label = useLabels();
   const {loading} = useSelector(state => state.language_id);
+  const [submitting, setSubmitting] = useState(false);
+
   const validationSchema = Yup.object().shape({
     email: Yup.string()
       .matches(
@@ -52,6 +54,7 @@ const Login = ({navigation}) => {
           initialValues={{email: ''}}
           validationSchema={validationSchema}
           onSubmit={async (values, {setSubmitting}) => {
+            setSubmitting(true);
             try {
               const Login = await dispatch(
                 login({email: values.email, fcm_token: 'string'}),
@@ -78,6 +81,7 @@ const Login = ({navigation}) => {
             values,
             errors,
             touched,
+            isSubmitting,
           }) => (
             <View style={LoginStyle.innerContainer}>
               {Header()}
@@ -97,12 +101,16 @@ const Login = ({navigation}) => {
                 <Text style={LoginStyle.infoText}>{label?.recievedEmail}</Text>
               ) : null}
               <View style={LoginStyle.buttonContainer}>
-                <ActionButton
-                  value={label?.login}
-                  onPress={handleSubmit}
-                  disabled={!values.email || !!errors.email}
-                  style={{}}
-                />
+                {isSubmitting ? (
+                  <Loader />
+                ) : (
+                  <ActionButton
+                    value={label?.login}
+                    onPress={handleSubmit}
+                    disabled={!values.email || !!errors.email || isSubmitting}
+                    style={{}}
+                  />
+                )}
               </View>
             </View>
           )}

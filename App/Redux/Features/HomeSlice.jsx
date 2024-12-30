@@ -9,7 +9,6 @@ export const homeCount = createAsyncThunk(
     const state = thunkAPI.getState();
     const {emails} = state.email;
     const tokens = emails.token.Token;
-    console.log(tokens);
     try {
       const response = await axios.get(
         'https://shipmentdelivery.vrinsoft.in/api/v1/Statistical_data',
@@ -18,7 +17,6 @@ export const homeCount = createAsyncThunk(
         },
       );
       const request = response.data.data;
-      console.log('respx', request);
       return request;
     } catch (error) {
       console.warn('ErrorDemo:', error?.response);
@@ -35,7 +33,6 @@ export const myDelivery = createAsyncThunk(
     const state = thunkAPI.getState();
     const {emails} = state.email;
     const tokens = emails.token.Token;
-    console.log(tokens);
     try {
       const response = await axios.get(
         'https://shipmentdelivery.vrinsoft.in/api/v1/delivery_list',
@@ -44,7 +41,7 @@ export const myDelivery = createAsyncThunk(
         },
       );
       const request = response.data.data;
-      console.log('resasx', request);
+      // console.log('resasx', request);
       return request;
     } catch (error) {
       console.warn('ErrorDemo:', error?.response);
@@ -61,7 +58,6 @@ export const myNotification = createAsyncThunk(
     const state = thunkAPI.getState();
     const {emails} = state.email;
     const tokens = emails.token.Token;
-    console.log(tokens);
     try {
       const response = await axios.get(
         'https://shipmentdelivery.vrinsoft.in/api/v1/notificiation_list',
@@ -70,7 +66,7 @@ export const myNotification = createAsyncThunk(
         },
       );
       const request = response.data.data;
-      console.log('resasx', request);
+      // console.log('resasx', request);
       return request;
     } catch (error) {
       console.warn('ErrorDemo:', error?.response);
@@ -81,13 +77,60 @@ export const myNotification = createAsyncThunk(
   },
 );
 
+export const deliveryDetail = createAsyncThunk(
+  'home/deliveryDetail',
+  async (shipment_id, {getState, rejectWithValue}) => {
+    try {
+      const state = getState();
+      const {emails} = state.email;
+      const tokens = emails.token.Token;
+      const request = await axios.post(
+        'https://shipmentdelivery.vrinsoft.in/api/v1/delivery_details',
+        shipment_id,
+        {headers: {Authorization: `Bearer ${tokens}`}},
+      );
+      const response = request.data.data;
+      return response;
+    } catch (error) {
+      console.error('Error fetching delivery details:', error);
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
+
+export const updateStatus = createAsyncThunk(
+  'home/updateStatus',
+  async ({shipment_id, status}, {getState, rejectWithValue}) => {
+    try {
+      const state = getState();
+      const {emails} = state.email;
+      const tokens = emails.token.Token;
+      const param = {shipment_id, status};
+      console.log(param);
+
+      const request = await axios.post(
+        'https://shipmentdelivery.vrinsoft.in/api/v1/update_delivery_status',
+        param,
+        {headers: {Authorization: `Bearer ${tokens}`}},
+      );
+      const response = request.data;
+      return response;
+    } catch (error) {
+      console.error('Error fetching delivery details:', error);
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
+
 const homeSlice = createSlice({
   name: 'home',
   initialState: {
     loading: false,
     homeCounts: null,
     myDeliveryData: null,
-    myNotifications:null,
+    myNotifications: null,
+    deliveryDetails: null,
+    editStatus: null,
     error: null,
   },
   extraReducers: builder => {
@@ -128,6 +171,31 @@ const homeSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
+      .addCase(deliveryDetail.pending, state => {
+        state.loading = true;
+      })
+      .addCase(deliveryDetail.fulfilled, (state, action) => {
+        state.loading = false;
+        state.deliveryDetails = action.payload;
+        state.error = null;
+      })
+      .addCase(deliveryDetail.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(updateStatus.pending, state => {
+        state.loading = true;
+      })
+      .addCase(updateStatus.fulfilled, (state, action) => {
+        state.loading = false;
+        state.editStatus = action.payload.data;
+        Toast.show(action.payload.message);
+      })
+      .addCase(updateStatus.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+        Toast.show(state.error);
+      });
   },
 });
 

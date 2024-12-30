@@ -11,17 +11,22 @@ import {
   View,
 } from 'react-native';
 import React, {useEffect, useRef, useState} from 'react';
-import {Colors, Fonts, Images} from '../../../Assets/Assets';
+import {Colors, Images} from '../../../Assets/Assets';
 import {ActionButton, Header} from '../../../Components/Component';
 import {Labels} from '../../../Assets/Labels';
 import Scale from '../../../Helper/Responsive';
 import DeliveryDetailsStyle from './DeliveryDetailsStyle';
 import RBSheet from 'react-native-raw-bottom-sheet';
 // import {DeliveryStatus} from '../../../Helper/JsonData';
+import Toast from 'react-native-simple-toast';
 import {useNavigation} from '@react-navigation/native';
 import {useLabels} from '../../../Helper/ReduxLabels';
+import {deliveryDetail, updateStatus} from '../../../Redux/Features/HomeSlice';
+import {useDispatch, useSelector} from 'react-redux';
+import Loader from '../../../Helper/Loader';
 
 const DeliveryDetails = ({route}) => {
+  const dispatch = useDispatch();
   const label = useLabels();
   const navigation = useNavigation();
   const [agentId, setAgentId] = useState('');
@@ -34,6 +39,8 @@ const DeliveryDetails = ({route}) => {
   const refStatusRBSheet = useRef();
   const refRejectRBSheet = useRef();
   const {data} = route.params;
+  const {deliveryDetails, loading} = useSelector(state => state.home);
+  console.log('HomeDetails', deliveryDetails);
 
   const DeliveryStatus = [
     {
@@ -64,6 +71,23 @@ const DeliveryDetails = ({route}) => {
     };
   }, []);
 
+  useEffect(() => {
+    dispatch(deliveryDetail({shipment_id: data?.shipment_id}));
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (deliveryDetails?.shipment_status === '1') {
+      setSelectedItem(DeliveryStatus[0].id);
+      setSelectedStatus(DeliveryStatus[0].status);
+    } else if (deliveryDetails?.shipment_status === '2') {
+      setSelectedItem(DeliveryStatus[1].id);
+      setSelectedStatus(DeliveryStatus[1].status);
+    } else {
+      setSelectedItem(DeliveryStatus[2].id);
+      setSelectedStatus(DeliveryStatus[2].status);
+    }
+  }, [deliveryDetails?.shipment_status]);
+
   const handlePress = item => {
     setSelectedItem(item.id);
   };
@@ -80,17 +104,17 @@ const DeliveryDetails = ({route}) => {
 
   useEffect(() => {
     if (statusModalVisible) {
-      refStatusRBSheet.current.open();
+      refStatusRBSheet?.current?.open();
     } else {
-      refStatusRBSheet.current.close();
+      refStatusRBSheet?.current?.close();
     }
   }, [statusModalVisible]);
 
   useEffect(() => {
     if (rejectModalVisible) {
-      refRejectRBSheet.current.open();
+      refRejectRBSheet?.current?.open();
     } else {
-      refRejectRBSheet.current.close();
+      refRejectRBSheet?.current?.close();
     }
   }, [rejectModalVisible]);
 
@@ -104,11 +128,11 @@ const DeliveryDetails = ({route}) => {
           style={[
             DeliveryDetailsStyle.shipmentTypeBadge,
             {
-              backgroundColor: data.type === 'Urgent' ?'red' : Colors.Green  ,
+              backgroundColor: data.type === 'Urgent' ? 'red' : Colors.Green,
             },
           ]}>
           <Text style={DeliveryDetailsStyle.shipmentTypeLabel}>
-            {data.type}
+            {deliveryDetails?.shipment_type}
           </Text>
         </View>
       </View>
@@ -119,12 +143,13 @@ const DeliveryDetails = ({route}) => {
       <View>
         <Text style={DeliveryDetailsStyle.agentIdText}>{label.agentID}</Text>
         <TextInput
-          placeholder={label.pleaseEnterAgentId}
+          placeholder={label?.pleaseEnterAgentId}
           placeholderTextColor={Colors.Grey200}
           value={agentId}
           onChangeText={text => setAgentId(text)}
           style={DeliveryDetailsStyle.textInput}
           keyboardType="numeric"
+          maxLength={12}
         />
       </View>
     );
@@ -136,13 +161,17 @@ const DeliveryDetails = ({route}) => {
           <Text style={DeliveryDetailsStyle.rowItemHeader}>
             {label.shipmentId}
           </Text>
-          <Text style={DeliveryDetailsStyle.rowItemText}>{data.id}</Text>
+          <Text style={DeliveryDetailsStyle.rowItemText}>
+            {deliveryDetails?.shipment_uniqueid}
+          </Text>
         </View>
         <View style={DeliveryDetailsStyle.rowItem}>
           <Text style={DeliveryDetailsStyle.rowItemHeader}>
             {label.totalCharges}
           </Text>
-          <Text style={DeliveryDetailsStyle.rowItemText}>₹ {data.charge}</Text>
+          <Text style={DeliveryDetailsStyle.rowItemText}>
+            ₹ {deliveryDetails?.charges}
+          </Text>
         </View>
       </View>
     );
@@ -167,12 +196,12 @@ const DeliveryDetails = ({route}) => {
               tintColor={'#666666'}
             />
           </View>
-          <View style={{flex:1}}>
+          <View style={{flex: 1}}>
             <Text style={DeliveryDetailsStyle.pickUpText}>
               {label.pickUpDate}
             </Text>
             <Text style={DeliveryDetailsStyle.dateTimeText}>
-              {data.pickUpDate}
+              {deliveryDetails?.shipment_date}
             </Text>
           </View>
         </View>
@@ -184,12 +213,12 @@ const DeliveryDetails = ({route}) => {
               tintColor={'#666666'}
             />
           </View>
-          <View style={{flex:1}}>
+          <View style={{flex: 1}}>
             <Text style={DeliveryDetailsStyle.pickUpText}>
               {label.pickUpTime}
             </Text>
             <Text style={DeliveryDetailsStyle.dateTimeText}>
-              {data.pickUpTime}
+              {deliveryDetails?.shipment_time}
             </Text>
           </View>
         </View>
@@ -205,7 +234,7 @@ const DeliveryDetails = ({route}) => {
         />
         <Text style={DeliveryDetailsStyle.pickUp}>{label.pickUpLocation}</Text>
         <Text style={DeliveryDetailsStyle.pickUpData}>
-          {data.pickUpLocation}
+          {deliveryDetails?.shipment_pickup_location}
         </Text>
         <Image
           source={Images.red_round}
@@ -224,7 +253,9 @@ const DeliveryDetails = ({route}) => {
           paddingHorizontal: Scale(30),
         }}>
         <Text style={DeliveryDetailsStyle.pickUp}>{label.dropLocation}</Text>
-        <Text style={DeliveryDetailsStyle.pickUpData}>{data.dropLocation}</Text>
+        <Text style={DeliveryDetailsStyle.pickUpData}>
+          {deliveryDetails?.shipment_drop_location}
+        </Text>
       </View>
     );
   };
@@ -240,7 +271,7 @@ const DeliveryDetails = ({route}) => {
           {PickUpLocation()}
           {DropLocation()}
         </View>
-        {showStatus === true ? (
+        {showStatus === true && (
           <View style={{marginTop: Scale(15)}}>
             <Text style={DeliveryDetailsStyle.statusText}>
               {label.shipmentstatus}
@@ -259,8 +290,6 @@ const DeliveryDetails = ({route}) => {
               />
             </TouchableOpacity>
           </View>
-        ) : (
-          <View></View>
         )}
       </View>
     );
@@ -383,30 +412,42 @@ const DeliveryDetails = ({route}) => {
         }
         barStyle={'dark-content'}
       />
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <Header header={label.myDelivery} />
-        <View style={DeliveryDetailsStyle.contentContainer}>
-          <Text
-            style={[DeliveryDetailsStyle.headerText, {marginTop: Scale(8)}]}>
-            {label.shipmentDetails}
-          </Text>
-          {ShipmentDetails()}
-          <Text
-            style={[DeliveryDetailsStyle.headerText, {marginTop: Scale(20)}]}>
-            {label.shipmentInformation}
-          </Text>
-          {ShipmentInfo()}
-          {StatusModel()}
-          {RejectModel()}
-        </View>
-      </ScrollView>
+      {loading ? (
+        <Loader />
+      ) : (
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <Header header={label.myDelivery} />
+          <View style={DeliveryDetailsStyle.contentContainer}>
+            <Text
+              style={[DeliveryDetailsStyle.headerText, {marginTop: Scale(8)}]}>
+              {label.shipmentDetails}
+            </Text>
+            {ShipmentDetails()}
+            <Text
+              style={[DeliveryDetailsStyle.headerText, {marginTop: Scale(20)}]}>
+              {label.shipmentInformation}
+            </Text>
+            {ShipmentInfo()}
+            {StatusModel()}
+            {RejectModel()}
+          </View>
+        </ScrollView>
+      )}
       {!isKeyboardVisible &&
         (showStatus ? (
           <ActionButton
             value={label.update}
             disabled={!selectedStatus}
             style={{marginHorizontal: Scale(20), marginBottom: Scale(10)}}
-            onPress={() => navigation.navigate('myDelivery')}
+            onPress={() => {
+              dispatch(
+                updateStatus({
+                  shipment_id: data?.shipment_id,
+                  status: selectedItem,
+                }),
+              );
+              navigation.navigate('myDelivery');
+            }}
           />
         ) : (
           <View style={DeliveryDetailsStyle.bottomButton}>

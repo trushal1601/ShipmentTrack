@@ -28,7 +28,7 @@ const MyDelivery = () => {
   }, [dispatch]);
 
   const {loading, myDeliveryData} = useSelector(state => state.home);
-  console.log('count', myDeliveryData);
+  // console.log('count', myDeliveryData);
 
   const DeliveryOrder = [
     {

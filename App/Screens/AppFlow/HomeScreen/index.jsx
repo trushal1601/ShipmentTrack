@@ -38,17 +38,12 @@ const HomeScreen = () => {
     home: state.home,
   }));
 
-  // const {emails} = useSelector(state => state.email);
-  // console.log("emails",emails.token.Token);
-  // const tokens = emails.token.Token;
-  // console.log(tokens);
-
   useEffect(() => {
     dispatch(homeCount());
   }, [dispatch]);
 
   const {homeCounts} = useSelector(state => state.home);
-  console.log('count', homeCounts);
+  // console.log('count', homeCounts);
 
   const [countryModalVisible, setCountryModalVisible] = useState(false);
   const [logoutModalVisible, setLogoutModalVisible] = useState(false);
@@ -152,7 +147,9 @@ const HomeScreen = () => {
             style={HomeScreenStyle.notificationButton}
             onPress={() => navigation.navigate('notification')}>
             <Image source={Images.notification} style={HomeScreenStyle.icon} />
-            <Text style={HomeScreenStyle.notificationText}>{homeCounts.notification_count}</Text>
+            <Text style={HomeScreenStyle.notificationText}>
+              {homeCounts?.notification_count}
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
