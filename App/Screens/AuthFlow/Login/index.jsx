@@ -51,9 +51,25 @@ const Login = ({navigation}) => {
         <Formik
           initialValues={{email: ''}}
           validationSchema={validationSchema}
-          onSubmit={values => {
-            dispatch(login({email: values.email, fcm_token: 'string'}));
-            navigation.navigate('OTPVerify', {fcm_token: 'string'});
+          onSubmit={async (values, {setSubmitting}) => {
+            try {
+              const Login = await dispatch(
+                login({email: values.email, fcm_token: 'string'}),
+              );
+              if (Login.type === login.fulfilled.type) {
+                const {message} = Login.payload;
+                if (message === 'success_message') {
+                  navigation.navigate('OTPVerify', {fcm_token: 'string'});
+                }
+              } else {
+                throw new Error('Login response not as expected');
+              }
+            } catch (error) {
+              console.error('Error logging in:', error);
+              Alert.alert('Error logging in. Please try again.');
+            } finally {
+              setSubmitting(false);
+            }
           }}>
           {({
             handleChange,

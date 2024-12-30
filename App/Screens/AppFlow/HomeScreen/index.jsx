@@ -24,6 +24,7 @@ import {useLabels} from '../../../Helper/ReduxLabels';
 import Loader from '../../../Helper/Loader';
 import {language_id} from '../../../Redux/Features/LanguageSlice';
 import RNRestart from 'react-native-restart';
+import {homeCount} from '../../../Redux/Features/HomeSlice';
 
 const HomeScreen = () => {
   const dispatch = useDispatch();
@@ -32,8 +33,23 @@ const HomeScreen = () => {
   const selectedLanguage = useSelector(
     state => state.language.selectedLanguage,
   );
-  const {loading} = useSelector(state => state.language_id);
-  // console.log('selectedLanguage', selectedLanguage);
+  const {loading} = useSelector(state => ({
+    languageId: state.language_id,
+    home: state.home,
+  }));
+
+  // const {emails} = useSelector(state => state.email);
+  // console.log("emails",emails.token.Token);
+  // const tokens = emails.token.Token;
+  // console.log(tokens);
+
+  useEffect(() => {
+    dispatch(homeCount());
+  }, [dispatch]);
+
+  const {homeCounts} = useSelector(state => state.home);
+  console.log('count', homeCounts);
+
   const [countryModalVisible, setCountryModalVisible] = useState(false);
   const [logoutModalVisible, setLogoutModalVisible] = useState(false);
   const [selectedItem, setSelectedItem] = useState(selectedLanguage?.icon);
@@ -45,28 +61,28 @@ const HomeScreen = () => {
     {
       id: 1,
       label: label?.deliveriesAssigned,
-      count: 10,
+      count: homeCounts?.assigned_Deliveries,
       status: Images.icon1,
       bgColor: '#DBF2FF',
     },
     {
       id: 2,
       label: label?.completedDeliveries,
-      count: '06',
+      count: homeCounts?.completed_Deliveries,
       status: Images.icon2,
       bgColor: '#DDF3E6',
     },
     {
       id: 3,
       label: label?.pendingDeliveries,
-      count: '01',
+      count: homeCounts?.pending_Deliveries,
       status: Images.icon3,
       bgColor: '#FFF6D8',
     },
     {
       id: 4,
       label: label?.delayedDeliveries,
-      count: '03',
+      count: homeCounts?.delayed_Deliveries,
       status: Images.icon4,
       bgColor: '#FFEDED',
     },
@@ -136,7 +152,7 @@ const HomeScreen = () => {
             style={HomeScreenStyle.notificationButton}
             onPress={() => navigation.navigate('notification')}>
             <Image source={Images.notification} style={HomeScreenStyle.icon} />
-            <Text style={HomeScreenStyle.notificationText}>1</Text>
+            <Text style={HomeScreenStyle.notificationText}>{homeCounts.notification_count}</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -328,8 +344,7 @@ const HomeScreen = () => {
   return loading ? (
     <Loader />
   ) : (
-    <View
-      style={{backgroundColor: Colors.White, flex: 1}}>
+    <View style={{backgroundColor: Colors.White, flex: 1}}>
       <StatusBar
         backgroundColor={
           countryModalVisible || logoutModalVisible ? '#36393C99' : Colors.White

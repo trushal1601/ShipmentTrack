@@ -27,7 +27,7 @@ import OTPVerifyStyle from './OTPVerifyStyle';
 import {useLabels} from '../../../Helper/ReduxLabels';
 import {useDispatch, useSelector} from 'react-redux';
 import Loader from '../../../Helper/Loader';
-import {verifyOTP} from '../../../Redux/Features/LanguageSlice';
+import {resendOTP, verifyOTP} from '../../../Redux/Features/LanguageSlice';
 import {setEmail} from '../../../Redux/Features/EmailSlice';
 
 const OTPVerify = ({route, initialSeconds = 120}) => {
@@ -71,7 +71,7 @@ const OTPVerify = ({route, initialSeconds = 120}) => {
   const handleResend = () => {
     setSeconds(initialSeconds);
     setIsOtpExpired(false);
-    // Add resend OTP logic here
+    dispatch(resendOTP({email: loginEmail?.email, fcm_token}));
   };
 
   const Email = () => {
@@ -89,30 +89,25 @@ const OTPVerify = ({route, initialSeconds = 120}) => {
     navigation,
   ) => {
     try {
-      if (enteredOtp === loginEmail?.otp) {
-        console.log('OTP verification successful');
-        const response = await dispatch(
-          verifyOTP({email: loginEmail.email, fcm_token, otp: enteredOtp}),
-        );
-        const token = response?.data?.token;
-        await dispatch(
-          setEmail({
-            email: loginEmail.email,
-            fcm_token,
-            otp: enteredOtp,
-            token,
-          }),
-        );
-        console.log('OTP verified and email set successfully.');
+      const response = await dispatch(
+        verifyOTP({email: loginEmail.email, fcm_token, otp: enteredOtp}),
+      );
+      const token = response?.payload?.data;
+      // console.log('token====>', token);
 
+      await dispatch(
+        setEmail({
+          email: loginEmail.email,
+          fcm_token,
+          otp: enteredOtp,
+          token,
+        }),
+      );
+      if (token) {
         navigation.navigate('home');
-      } else {
-        console.log('OTP verification failed');
-        Alert.alert('Invalid OTP. Please try again.');
       }
     } catch (error) {
       console.error('Error verifying OTP and setting email:', error);
-      Alert.alert('Error verifying OTP. Please try again.');
     } finally {
       setSubmitting(false);
     }

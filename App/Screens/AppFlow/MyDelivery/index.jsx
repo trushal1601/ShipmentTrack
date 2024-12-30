@@ -7,17 +7,28 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Colors, Fonts, Images} from '../../../Assets/Assets';
 import {Header} from '../../../Components/Component';
 import {Labels} from '../../../Assets/Labels';
 import MyDeliveryStyle from './MyDeliveryStyle';
 import {useNavigation} from '@react-navigation/native';
 import {useLabels} from '../../../Helper/ReduxLabels';
+import {useDispatch, useSelector} from 'react-redux';
+import {myDelivery} from '../../../Redux/Features/HomeSlice';
+import Loader from '../../../Helper/Loader';
 
 const MyDelivery = () => {
+  const dispatch = useDispatch();
   const navigation = useNavigation();
   const label = useLabels();
+
+  useEffect(() => {
+    dispatch(myDelivery());
+  }, [dispatch]);
+
+  const {loading, myDeliveryData} = useSelector(state => state.home);
+  console.log('count', myDeliveryData);
 
   const DeliveryOrder = [
     {
@@ -90,13 +101,13 @@ const MyDelivery = () => {
   const Delivery = () => {
     return (
       <FlatList
-        data={DeliveryOrder}
+        data={myDeliveryData}
         keyExtractor={item => item.id}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={MyDeliveryStyle.flatListContent}
         renderItem={({item}) => {
           return (
-            <View style={MyDeliveryStyle.itemContainer}>
+            <View style={MyDeliveryStyle.itemContainer} key={item.shipment_id}>
               <View style={MyDeliveryStyle.itemHeader}>
                 <Text style={MyDeliveryStyle.shipmentTypeText}>
                   {label.shipmentType}
@@ -110,7 +121,7 @@ const MyDelivery = () => {
                     },
                   ]}>
                   <Text style={MyDeliveryStyle.shipmentTypeLabel}>
-                    {item.type}
+                    {item.shipment_type}
                   </Text>
                 </View>
               </View>
@@ -131,7 +142,7 @@ const MyDelivery = () => {
                       {label.pickUpDate}
                     </Text>
                     <Text style={MyDeliveryStyle.detailSubtext}>
-                      {item.pickUpDate}
+                      {item.shipment_date}
                     </Text>
                   </View>
                 </View>
@@ -148,7 +159,7 @@ const MyDelivery = () => {
                       {label.pickUpTime}
                     </Text>
                     <Text style={MyDeliveryStyle.detailSubtext}>
-                      {item.pickUpTime}
+                      {item.shipment_time}
                     </Text>
                   </View>
                 </View>
@@ -174,8 +185,14 @@ const MyDelivery = () => {
   return (
     <View style={MyDeliveryStyle.container}>
       <StatusBar backgroundColor={Colors.White} barStyle={'dark-content'} />
+      {/* {loading ? (
+        <Loader />
+      ) : (
+        <> */}
       <Header header={label.myDelivery} />
       {Delivery()}
+      {/* </>
+      )} */}
     </View>
   );
 };
