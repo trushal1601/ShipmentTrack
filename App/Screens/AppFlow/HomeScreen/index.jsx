@@ -50,7 +50,7 @@ const HomeScreen = () => {
 
   const [countryModalVisible, setCountryModalVisible] = useState(false);
   const [logoutModalVisible, setLogoutModalVisible] = useState(false);
-  const [selectedItem, setSelectedItem] = useState(selectedLanguage?.icon);
+  const [selectedItem, setSelectedItem] = useState(selectedLanguage?.id);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [selected, setSelected] = useState(selectedLanguage?.icon);
   const refCountryRBSheet = useRef(null);
@@ -86,16 +86,6 @@ const HomeScreen = () => {
       bgColor: '#FFEDED',
     },
   ];
-
-  const handleLogout = () => {
-    // RNRestart.Restart();
-    console.log('logout Press');
-
-    dispatch(logOut());
-    dispatch(setEmail(null));
-    setIsLoggingOut(true);
-    navigation.navigate('loginScreen');
-  };
 
   useEffect(() => {
     if (countryModalVisible) {
@@ -140,6 +130,15 @@ const HomeScreen = () => {
     setSelectedItem(selected.id);
     dispatch(language(selected));
     setCountryModalVisible(false);
+  };
+  const handleLogout = () => {
+    // RNRestart.Restart();
+    console.log('logout Press');
+    setLogoutModalVisible(false);
+    dispatch(logOut());
+    dispatch(setEmail(null));
+    setIsLoggingOut(true);
+    navigation.navigate('loginScreen');
   };
 
   const Header = () => {
@@ -354,7 +353,9 @@ const HomeScreen = () => {
     <View style={{backgroundColor: Colors.White, flex: 1}}>
       <StatusBar
         backgroundColor={
-          countryModalVisible || logoutModalVisible ? '#36393C99' : Colors.White
+          countryModalVisible || logoutModalVisible === true
+            ? '#36393C99'
+            : Colors.White
         }
         barStyle={'dark-content'}
       />

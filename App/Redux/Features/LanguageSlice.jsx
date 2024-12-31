@@ -17,51 +17,83 @@ export const language_id = createAsyncThunk(
   },
 );
 
+// export const login = createAsyncThunk(
+//   'language/login',
+//   async ({email, fcm_token}) => {
+//     const param = {email, fcm_token};
+//     // console.log(param, '<======== param');
+
+//     const request = await axios.post(
+//       `https://shipmentdelivery.vrinsoft.in/api/v1/login`,
+//       param,
+//     );
+//     const response = request.data;
+//     // console.log('rsfcadsd =====> ', response);
+//     return response;
+//   },
+// );
+
 export const login = createAsyncThunk(
   'language/login',
-  async ({email, fcm_token}) => {
+  async ({email, fcm_token}, {rejectWithValue}) => {
     const param = {email, fcm_token};
-    // console.log(param, '<======== param');
-
-    const request = await axios.post(
-      `https://shipmentdelivery.vrinsoft.in/api/v1/login`,
-      param,
-    );
-    const response = request.data;
-    // console.log('rsfcadsd =====> ', response);
-    return response;
+    try {
+      const request = await axios.post(
+        'https://shipmentdelivery.vrinsoft.in/api/v1/login',
+        param,
+      );
+      const response = request.data;
+      return response;
+    } catch (error) {
+      console.error('Error logging In:', error);
+      return rejectWithValue(
+        error.response ? error.response.data : error.message,
+      );
+    }
   },
 );
 
 export const verifyOTP = createAsyncThunk(
   'language/verifyOTP',
-  async ({email, fcm_token, otp}) => {
+  async ({email, fcm_token, otp}, {rejectWithValue}) => {
     const param = {email, fcm_token, otp};
     // console.log(param, '<======== param');
-
-    const request = await axios.post(
-      `https://shipmentdelivery.vrinsoft.in/api/v1/verify_otp`,
-      param,
-    );
-    const response = request.data;
-    // console.log('verifyOTP======>', response);
-    return response;
+    try {
+      const request = await axios.post(
+        `https://shipmentdelivery.vrinsoft.in/api/v1/verify_otp`,
+        param,
+      );
+      const response = request.data;
+      // console.log('verifyOTP======>', response);
+      return response;
+    } catch (error) {
+      console.error('Error Verify OTP:', error);
+      return rejectWithValue(
+        error.response ? error.response.data : error.message,
+      );
+    }
   },
 );
 
 export const resendOTP = createAsyncThunk(
   'language/resendOTP',
-  async ({email, fcm_token}) => {
+  async ({email, fcm_token}, {rejectWithValue}) => {
     const param = {email, fcm_token};
     // console.log(param, '<======== param');
-
-    const request = await axios.post(
-      `https://shipmentdelivery.vrinsoft.in/api/v1/resend_OTP`,
-      param,
-    );
-    const response = request.data;
-    console.log('resendOTP======>', response);
-    // return response;
+    try {
+      const request = await axios.post(
+        `https://shipmentdelivery.vrinsoft.in/api/v1/resend_OTP`,
+        param,
+      );
+      const response = request.data;
+      console.log('resendOTP======>', response);
+      // return response;
+    } catch (error) {
+      console.error('Error Resend OTP:', error);
+      return rejectWithValue(
+        error.response ? error.response.data : error.message,
+      );
+    }
   },
 );
 
@@ -78,6 +110,7 @@ const languageSlice = createSlice({
   },
   extraReducers: builder => {
     builder
+      //change Language
       .addCase(language_id.pending, state => {
         state.loading = true;
       })
@@ -91,6 +124,7 @@ const languageSlice = createSlice({
         state.error = action.error.message;
         Toast.show(state.error);
       })
+      //login User
       .addCase(login.pending, state => {
         state.otpVerifyLoading = true;
       })
@@ -104,6 +138,7 @@ const languageSlice = createSlice({
         state.error = action.error.message;
         Toast.show(state.error);
       })
+      //OTP verification
       .addCase(verifyOTP.pending, state => {
         state.otpVerifyLoading = true;
       })

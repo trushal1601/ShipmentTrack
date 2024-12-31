@@ -8,7 +8,6 @@ export const homeCount = createAsyncThunk(
     const state = thunkAPI.getState();
     const {emails} = state.email;
     const tokens = emails.token;
-
     try {
       const response = await axios.get(
         'https://shipmentdelivery.vrinsoft.in/api/v1/Statistical_data',
@@ -19,7 +18,7 @@ export const homeCount = createAsyncThunk(
       const request = response.data.data;
       return request;
     } catch (error) {
-      console.warn('ErrorDemo:', error?.response);
+      console.warn('Error fetching counts:', error?.response);
       return thunkAPI.rejectWithValue(
         error.response?.data || 'Unexpected Error',
       );
@@ -45,7 +44,7 @@ export const myDelivery = createAsyncThunk(
       // console.log('resasx', request);
       return request;
     } catch (error) {
-      console.warn('ErrorDemo:', error?.response);
+      console.warn('Error fetch myDeliveries:', error?.response);
       return thunkAPI.rejectWithValue(
         error.response?.data || 'Unexpected Error',
       );
@@ -71,7 +70,7 @@ export const myNotification = createAsyncThunk(
       // console.log('resasx', request);
       return request;
     } catch (error) {
-      console.warn('ErrorDemo:', error?.response);
+      console.warn('Error fetching Notification:', error?.response);
       return thunkAPI.rejectWithValue(
         error.response?.data || 'Unexpected Error',
       );
@@ -120,7 +119,7 @@ export const updateStatus = createAsyncThunk(
       const response = request.data;
       return response;
     } catch (error) {
-      console.error('Error fetching delivery details:', error);
+      console.error('Error Updating Status:', error);
       return rejectWithValue(error.response.data);
     }
   },
@@ -167,6 +166,7 @@ const homeSlice = createSlice({
   },
   extraReducers: builder => {
     builder
+      //Home Page counts
       .addCase(homeCount.pending, state => {
         state.loading = true;
       })
@@ -180,6 +180,7 @@ const homeSlice = createSlice({
         state.error = action.payload;
         Toast.show(state.error);
       })
+      //Fetch myDeliveries
       .addCase(myDelivery.pending, state => {
         state.loading = true;
       })
@@ -193,6 +194,7 @@ const homeSlice = createSlice({
         state.error = action.payload;
         Toast.show(state.error);
       })
+      //fetch myNotifications
       .addCase(myNotification.pending, state => {
         state.loading = true;
       })
@@ -206,6 +208,7 @@ const homeSlice = createSlice({
         state.error = action.payload;
         Toast.show(state.error);
       })
+      //get Delivery Details
       .addCase(deliveryDetail.pending, state => {
         state.loading = true;
       })
@@ -219,6 +222,7 @@ const homeSlice = createSlice({
         state.error = action.payload;
         Toast.show(state.error);
       })
+      //updating DeliveryStatus
       .addCase(updateStatus.pending, state => {
         state.loading = true;
       })
@@ -232,6 +236,7 @@ const homeSlice = createSlice({
         state.error = action.payload;
         Toast.show(state.error);
       })
+      //logOut User
       .addCase(logOut.pending, state => {
         state.loading = true;
       })
