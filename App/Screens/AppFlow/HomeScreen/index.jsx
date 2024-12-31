@@ -24,7 +24,8 @@ import {useLabels} from '../../../Helper/ReduxLabels';
 import Loader from '../../../Helper/Loader';
 import {language_id} from '../../../Redux/Features/LanguageSlice';
 import RNRestart from 'react-native-restart';
-import {homeCount} from '../../../Redux/Features/HomeSlice';
+import {homeCount, logOut} from '../../../Redux/Features/HomeSlice';
+import {setEmail} from '../../../Redux/Features/EmailSlice';
 
 const HomeScreen = () => {
   const dispatch = useDispatch();
@@ -37,6 +38,8 @@ const HomeScreen = () => {
     languageId: state.language_id,
     home: state.home,
   }));
+  // const {emails} = useSelector(state => state.email);
+  // console.log('homeEmail', emails?.token);
 
   useEffect(() => {
     dispatch(homeCount());
@@ -48,6 +51,7 @@ const HomeScreen = () => {
   const [countryModalVisible, setCountryModalVisible] = useState(false);
   const [logoutModalVisible, setLogoutModalVisible] = useState(false);
   const [selectedItem, setSelectedItem] = useState(selectedLanguage?.icon);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [selected, setSelected] = useState(selectedLanguage?.icon);
   const refCountryRBSheet = useRef(null);
   const refLogoutRBSheet = useRef(null);
@@ -84,7 +88,13 @@ const HomeScreen = () => {
   ];
 
   const handleLogout = () => {
-    RNRestart.Restart();
+    // RNRestart.Restart();
+    console.log('logout Press');
+
+    dispatch(logOut());
+    dispatch(setEmail(null));
+    setIsLoggingOut(true);
+    navigation.navigate('loginScreen');
   };
 
   useEffect(() => {

@@ -92,14 +92,11 @@ const OTPVerify = ({route, initialSeconds = 120}) => {
       const response = await dispatch(
         verifyOTP({email: loginEmail.email, fcm_token, otp: enteredOtp}),
       );
-      const token = response?.payload?.data;
+      const token = response?.payload?.data?.Token;
       // console.log('token====>', token);
 
       await dispatch(
         setEmail({
-          email: loginEmail.email,
-          fcm_token,
-          otp: enteredOtp,
           token,
         }),
       );

@@ -6,7 +6,7 @@ import {
   TextInput,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Colors, Fonts} from '../../../Assets/Assets';
 import {Labels} from '../../../Assets/Labels';
 import {ActionButton} from '../../../Components/Component';
@@ -24,6 +24,10 @@ const Login = ({navigation}) => {
   const label = useLabels();
   const {loading} = useSelector(state => state.language_id);
   const [submitting, setSubmitting] = useState(false);
+  const {emails} = useSelector(state => state.email);
+  useEffect(() => {
+    console.log('homeEmail', emails?.token);
+  });
 
   const validationSchema = Yup.object().shape({
     email: Yup.string()
@@ -53,7 +57,7 @@ const Login = ({navigation}) => {
         <Formik
           initialValues={{email: ''}}
           validationSchema={validationSchema}
-          onSubmit={async (values, {setSubmitting}) => {
+          onSubmit={async (values, {setSubmitting, resetForm}) => {
             setSubmitting(true);
             try {
               const Login = await dispatch(
@@ -64,6 +68,7 @@ const Login = ({navigation}) => {
                 if (message === 'success_message') {
                   navigation.navigate('OTPVerify', {fcm_token: 'string'});
                 }
+                resetForm();
               } else {
                 throw new Error('Login response not as expected');
               }

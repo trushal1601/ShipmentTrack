@@ -9,6 +9,7 @@ import {useLabels} from '../../../Helper/ReduxLabels';
 import {useDispatch, useSelector} from 'react-redux';
 import {myNotification} from '../../../Redux/Features/HomeSlice';
 import moment from 'moment';
+import Loader from '../../../Helper/Loader';
 
 const Notification = () => {
   const dispatch = useDispatch();
@@ -66,8 +67,14 @@ const Notification = () => {
   return (
     <View style={NotificationStyle.container}>
       <StatusBar backgroundColor={Colors.White} barStyle={'dark-content'} />
-      <Header header={label?.notification} />
-      {Notify()}
+      {loading ? (
+        <Loader />
+      ) : (
+        <>
+          <Header header={label?.notification} />
+          {Notify()}
+        </>
+      )}
     </View>
   );
 };

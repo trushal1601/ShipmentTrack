@@ -1,14 +1,14 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import axios from 'axios';
 import Toast from 'react-native-simple-toast';
-import {useSelector} from 'react-redux';
 
 export const homeCount = createAsyncThunk(
   'home/homeCount',
   async (_, thunkAPI) => {
     const state = thunkAPI.getState();
     const {emails} = state.email;
-    const tokens = emails.token.Token;
+    const tokens = emails.token;
+
     try {
       const response = await axios.get(
         'https://shipmentdelivery.vrinsoft.in/api/v1/Statistical_data',
@@ -32,7 +32,8 @@ export const myDelivery = createAsyncThunk(
   async (_, thunkAPI) => {
     const state = thunkAPI.getState();
     const {emails} = state.email;
-    const tokens = emails.token.Token;
+    const tokens = emails.token;
+
     try {
       const response = await axios.get(
         'https://shipmentdelivery.vrinsoft.in/api/v1/delivery_list',
@@ -57,7 +58,8 @@ export const myNotification = createAsyncThunk(
   async (_, thunkAPI) => {
     const state = thunkAPI.getState();
     const {emails} = state.email;
-    const tokens = emails.token.Token;
+    const tokens = emails.token;
+
     try {
       const response = await axios.get(
         'https://shipmentdelivery.vrinsoft.in/api/v1/notificiation_list',
@@ -83,7 +85,8 @@ export const deliveryDetail = createAsyncThunk(
     try {
       const state = getState();
       const {emails} = state.email;
-      const tokens = emails.token.Token;
+      const tokens = emails.token;
+
       const request = await axios.post(
         'https://shipmentdelivery.vrinsoft.in/api/v1/delivery_details',
         shipment_id,
@@ -104,9 +107,10 @@ export const updateStatus = createAsyncThunk(
     try {
       const state = getState();
       const {emails} = state.email;
-      const tokens = emails.token.Token;
+      const tokens = emails.token;
+
       const param = {shipment_id, status};
-      console.log(param);
+      // console.log(param);
 
       const request = await axios.post(
         'https://shipmentdelivery.vrinsoft.in/api/v1/update_delivery_status',
@@ -122,6 +126,33 @@ export const updateStatus = createAsyncThunk(
   },
 );
 
+export const logOut = createAsyncThunk(
+  'home/logOut',
+  async (_, {getState, rejectWithValue}) => {
+    try {
+      const state = getState();
+      const {emails} = state.email;
+      const tokens = emails ? emails.token : null;
+
+      if (!tokens) throw new Error('No token available');
+
+      const request = await axios.post(
+        'https://shipmentdelivery.vrinsoft.in/api/v1/logout',
+        {},
+        {headers: {Authorization: `Bearer ${tokens}`}},
+      );
+
+      const response = request.data;
+      console.log(response, 'response');
+
+      return response;
+    } catch (error) {
+      console.error('Error logging out:', error);
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
+
 const homeSlice = createSlice({
   name: 'home',
   initialState: {
@@ -131,6 +162,7 @@ const homeSlice = createSlice({
     myNotifications: null,
     deliveryDetails: null,
     editStatus: null,
+    logOut: null,
     error: null,
   },
   extraReducers: builder => {
@@ -146,6 +178,7 @@ const homeSlice = createSlice({
       .addCase(homeCount.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+        Toast.show(state.error);
       })
       .addCase(myDelivery.pending, state => {
         state.loading = true;
@@ -158,6 +191,7 @@ const homeSlice = createSlice({
       .addCase(myDelivery.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+        Toast.show(state.error);
       })
       .addCase(myNotification.pending, state => {
         state.loading = true;
@@ -170,6 +204,7 @@ const homeSlice = createSlice({
       .addCase(myNotification.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+        Toast.show(state.error);
       })
       .addCase(deliveryDetail.pending, state => {
         state.loading = true;
@@ -182,6 +217,7 @@ const homeSlice = createSlice({
       .addCase(deliveryDetail.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+        Toast.show(state.error);
       })
       .addCase(updateStatus.pending, state => {
         state.loading = true;
@@ -192,6 +228,19 @@ const homeSlice = createSlice({
         Toast.show(action.payload.message);
       })
       .addCase(updateStatus.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+        Toast.show(state.error);
+      })
+      .addCase(logOut.pending, state => {
+        state.loading = true;
+      })
+      .addCase(logOut.fulfilled, (state, action) => {
+        state.loading = false;
+        state.logOut = action.payload.data;
+        Toast.show(action.payload.message);
+      })
+      .addCase(logOut.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
         Toast.show(state.error);

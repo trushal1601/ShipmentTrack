@@ -185,14 +185,14 @@ const MyDelivery = () => {
   return (
     <View style={MyDeliveryStyle.container}>
       <StatusBar backgroundColor={Colors.White} barStyle={'dark-content'} />
-      {/* {loading ? (
+      {loading ? (
         <Loader />
       ) : (
-        <> */}
-      <Header header={label.myDelivery} />
-      {Delivery()}
-      {/* </>
-      )} */}
+        <>
+          <Header header={label.myDelivery} />
+          {Delivery()}
+        </>
+      )}
     </View>
   );
 };

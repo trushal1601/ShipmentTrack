@@ -23,9 +23,12 @@ const SplashScreen = () => {
       try {
         if (emails) {
           navigation.navigate('home', {email: emails});
+        } else if (isLoggingOut) {
+          navigation.navigate('loginScreen');
+          setIsLoggingOut(false);
         }
       } catch (error) {
-        Alert.alert('Error', 'Failed to retrieve email.');
+        console.log(error);
       } finally {
         setLoading(false);
       }

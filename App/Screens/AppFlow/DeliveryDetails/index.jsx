@@ -35,12 +35,12 @@ const DeliveryDetails = ({route}) => {
   const [statusModalVisible, setStatusModalVisible] = useState(false);
   const [rejectModalVisible, setRejectModalVisible] = useState(false);
   const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
-  const [selectedStatus, setSelectedStatus] = useState(null);
+  const [selectedStatus, setSelectedStatus] = useState(0);
   const refStatusRBSheet = useRef();
   const refRejectRBSheet = useRef();
   const {data} = route.params;
   const {deliveryDetails, loading} = useSelector(state => state.home);
-  console.log('HomeDetails', deliveryDetails);
+  // console.log('HomeDetails', deliveryDetails);
 
   const DeliveryStatus = [
     {
@@ -280,7 +280,7 @@ const DeliveryDetails = ({route}) => {
               onPress={() => setStatusModalVisible(true)}
               style={DeliveryDetailsStyle.statusView}>
               <Text style={DeliveryDetailsStyle.status}>
-                {selectedStatus === null
+                {selectedStatus === 0
                   ? label.pleaseSelectStatus
                   : selectedStatus}
               </Text>

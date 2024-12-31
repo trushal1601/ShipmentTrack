@@ -89,7 +89,7 @@ const languageSlice = createSlice({
       .addCase(language_id.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
-        // Toast.show(state.error);
+        Toast.show(state.error);
       })
       .addCase(login.pending, state => {
         state.otpVerifyLoading = true;
