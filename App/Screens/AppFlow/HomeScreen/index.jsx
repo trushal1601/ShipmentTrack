@@ -26,6 +26,7 @@ import {language_id} from '../../../Redux/Features/LanguageSlice';
 import RNRestart from 'react-native-restart';
 import {homeCount, logOut} from '../../../Redux/Features/HomeSlice';
 import {setEmail} from '../../../Redux/Features/EmailSlice';
+import Pending from 'react-native-vector-icons/MaterialIcons';
 
 const HomeScreen = () => {
   const dispatch = useDispatch();
@@ -59,6 +60,7 @@ const HomeScreen = () => {
       count: homeCounts?.assigned_Deliveries,
       status: Images.icon1,
       bgColor: '#DBF2FF',
+      tintColor: '#008EDE',
     },
     {
       id: 2,
@@ -66,6 +68,7 @@ const HomeScreen = () => {
       count: homeCounts?.completed_Deliveries,
       status: Images.icon2,
       bgColor: '#DDF3E6',
+      tintColor: '#27AE60',
     },
     {
       id: 3,
@@ -73,6 +76,7 @@ const HomeScreen = () => {
       count: homeCounts?.pending_Deliveries,
       status: Images.icon3,
       bgColor: '#FFF6D8',
+      tintColor: '#D8B42D',
     },
     {
       id: 4,
@@ -80,6 +84,7 @@ const HomeScreen = () => {
       count: homeCounts?.delayed_Deliveries,
       status: Images.icon4,
       bgColor: '#FFEDED',
+      tintColor:'#EB5757'
     },
   ];
 
@@ -190,6 +195,7 @@ const HomeScreen = () => {
                     <Image
                       source={item.status}
                       style={HomeScreenStyle.shipmentStatus}
+                      tintColor={item.tintColor}
                     />
                   </View>
                 </View>
@@ -222,6 +228,9 @@ const HomeScreen = () => {
                 <Image
                   source={
                     selectedItem === item.id ? Images.sradio : Images.UnSradio
+                  }
+                  tintColor={
+                    selectedItem === item.id ? Colors.Primary : Colors.Grey100
                   }
                   style={HomeScreenStyle.radioIcon}
                 />
