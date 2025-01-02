@@ -34,19 +34,15 @@ const HomeScreen = () => {
   const selectedLanguage = useSelector(
     state => state.language.selectedLanguage,
   );
-  const {loading} = useSelector(state => ({
-    languageId: state.language_id,
-    home: state.home,
-  }));
-  // const {emails} = useSelector(state => state.email);
-  // console.log('homeEmail', emails?.token);
+  const loading = useSelector(
+    state => state.language_id.loading || state.home.loading,
+  );
 
   useEffect(() => {
     dispatch(homeCount());
   }, [dispatch]);
 
   const {homeCounts} = useSelector(state => state.home);
-  // console.log('count', homeCounts);
 
   const [countryModalVisible, setCountryModalVisible] = useState(false);
   const [logoutModalVisible, setLogoutModalVisible] = useState(false);
