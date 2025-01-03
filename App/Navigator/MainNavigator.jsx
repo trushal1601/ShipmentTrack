@@ -1,5 +1,5 @@
 import {StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {NavigationContainer} from '@react-navigation/native';
 import ChooseLanguage from '../Screens/AuthFlow/ChooseLanguage';
@@ -9,9 +9,33 @@ import TabNavigator from './TabNavigator';
 import Notification from '../Screens/AppFlow/Notification';
 import DeliveryDetails from '../Screens/AppFlow/DeliveryDetails';
 import SplashScreen from '../Screens/AuthFlow/SplashScreen/SplashScreen';
+import messaging from '@react-native-firebase/messaging';
 
 const MainNavigator = () => {
   const Stack = createNativeStackNavigator();
+  // useEffect(() => {
+  //   requestUserPermission();
+  //   gettoken();
+  // }, []);
+  // async function requestUserPermission() {
+  //   const authStatus = await messaging().requestPermission();
+  //   const enabled =
+  //     authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+  //     authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+
+  //   if (enabled) {
+  //     console.log('Authorization status:', authStatus);
+  //   }
+  // }
+
+  // const gettoken = async () => {
+  //   try {
+  //     const token = await messaging().getToken();
+  //     console.log('FCM Token:', token);
+  //   } catch (error) {
+  //     console.error('Error getting FCM token:', error);
+  //   }
+  // };
   return (
     <NavigationContainer>
       <Stack.Navigator
@@ -32,7 +56,6 @@ const MainNavigator = () => {
 export default MainNavigator;
 
 const styles = StyleSheet.create({});
-
 
 // import {StyleSheet, Text, View} from 'react-native';
 // import React, {useEffect, useState} from 'react';
