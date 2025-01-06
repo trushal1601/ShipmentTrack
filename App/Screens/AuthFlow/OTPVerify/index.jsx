@@ -112,97 +112,103 @@ const OTPVerify = ({route, initialSeconds = 120}) => {
 
   return (
     <>
-      {otpVerifyLoading ? (
+      {/* {otpVerifyLoading ? (
         <Loader />
-      ) : (
-        <Formik
-          initialValues={{otp: ''}}
-          validationSchema={validationSchema}
-          onSubmit={async (values, {setSubmitting}) => {
-            handleOtpVerification(values.otp, setSubmitting, navigation);
-          }}>
-          {({
-            handleChange,
-            handleBlur,
-            handleSubmit,
-            values,
-            errors,
-            touched,
-          }) => (
-            <View style={OTPVerifyStyle.container}>
-              <StatusBar
-                backgroundColor={Colors.White}
-                barStyle={'dark-content'}
-              />
-              <Header />
-              <View style={OTPVerifyStyle.innerContainer}>
-                <Text style={OTPVerifyStyle.headerText}>
-                  {label?.otpVarification}
-                </Text>
-                <Text style={OTPVerifyStyle.bioText}>{label?.otpSomeword}</Text>
-                {Email()}
-                <CodeField
-                  ref={ref}
-                  {...props}
-                  value={otp}
-                  onChangeText={text => {
-                    setOtp(text);
-                    handleChange('otp')(text);
-                  }}
-                  cellCount={CELL_COUNT}
-                  rootStyle={OTPVerifyStyle.codeFieldRoot}
-                  keyboardType="number-pad"
-                  textContentType="oneTimeCode"
-                  renderCell={({index, symbol, isFocused}) => (
-                    <View
-                      onLayout={getCellOnLayoutHandler(index)}
-                      key={index}
-                      style={[
-                        OTPVerifyStyle.cell,
-                        isFocused && OTPVerifyStyle.focusCell,
-                      ]}>
-                      <Text style={OTPVerifyStyle.cellText}>
-                        {symbol || (isFocused ? <Cursor /> : null)}
-                      </Text>
-                    </View>
-                  )}
-                />
-
-                {touched.otp && errors.otp && (
-                  <Text style={OTPVerifyStyle.errorText}>{errors.otp}</Text>
-                )}
-                {isOtpExpired ? (
-                  <View style={OTPVerifyStyle.expiredContainer}>
-                    <Text style={OTPVerifyStyle.invalidOtpText}>
-                      {label.aheadMessage}
+      ) : ( */}
+      <Formik
+        initialValues={{otp: ''}}
+        validationSchema={validationSchema}
+        onSubmit={async (values, {setSubmitting}) => {
+          handleOtpVerification(values.otp, setSubmitting, navigation);
+        }}>
+        {({
+          handleChange,
+          handleBlur,
+          handleSubmit,
+          values,
+          errors,
+          touched,
+        }) => (
+          <View style={OTPVerifyStyle.container}>
+            <StatusBar
+              backgroundColor={Colors.White}
+              barStyle={'dark-content'}
+            />
+            <Header />
+            <View style={OTPVerifyStyle.innerContainer}>
+              <Text style={OTPVerifyStyle.headerText}>
+                {label?.otpVarification}
+              </Text>
+              <Text style={OTPVerifyStyle.bioText}>{label?.otpSomeword}</Text>
+              {Email()}
+              <CodeField
+                ref={ref}
+                {...props}
+                value={otp}
+                onChangeText={text => {
+                  setOtp(text);
+                  handleChange('otp')(text);
+                }}
+                cellCount={CELL_COUNT}
+                rootStyle={OTPVerifyStyle.codeFieldRoot}
+                keyboardType="number-pad"
+                textContentType="oneTimeCode"
+                renderCell={({index, symbol, isFocused}) => (
+                  <View
+                    onLayout={getCellOnLayoutHandler(index)}
+                    key={index}
+                    style={[
+                      OTPVerifyStyle.cell,
+                      isFocused && OTPVerifyStyle.focusCell,
+                    ]}>
+                    <Text style={OTPVerifyStyle.cellText}>
+                      {symbol || (isFocused ? <Cursor /> : null)}
                     </Text>
-                    <Pressable onPress={handleResend}>
-                      <Text style={OTPVerifyStyle.resendText}>
-                        {label.resend}
-                      </Text>
-                    </Pressable>
                   </View>
-                ) : (
-                  <Text
-                    style={{
-                      fontSize: Scale(14),
-                      marginTop: Scale(10),
-                      fontFamily: Fonts.proximanova_bold,
-                    }}>
-                    Your OTP is : {loginEmail?.otp}
-                  </Text>
                 )}
+              />
+
+              {touched.otp && errors.otp && (
+                <Text style={OTPVerifyStyle.errorText}>{errors.otp}</Text>
+              )}
+              {isOtpExpired ? (
+                <View style={OTPVerifyStyle.expiredContainer}>
+                  <Text style={OTPVerifyStyle.invalidOtpText}>
+                    {label.aheadMessage}
+                  </Text>
+                  <Pressable onPress={handleResend}>
+                    <Text style={OTPVerifyStyle.resendText}>
+                      {label.resend}
+                    </Text>
+                  </Pressable>
+                </View>
+              ) : (
+                <Text
+                  style={{
+                    fontSize: Scale(14),
+                    marginTop: Scale(10),
+                    fontFamily: Fonts.proximanova_bold,
+                  }}>
+                  Your OTP is : {loginEmail?.otp}
+                </Text>
+              )}
+              {otpVerifyLoading ? (
+                <View style={{marginTop: Scale(50)}}>
+                  <Loader />
+                </View>
+              ) : (
                 <ActionButton
                   value={label?.verify}
                   disabled={otp.length < CELL_COUNT || !!errors.otp}
                   onPress={handleSubmit}
                   style={OTPVerifyStyle.verifyButton}
                 />
-              </View>
+              )}
             </View>
-          )}
-        </Formik>
-      )}
+          </View>
+        )}
+      </Formik>
+      {/* )} */}
     </>
   );
 };

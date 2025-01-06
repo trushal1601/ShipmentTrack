@@ -107,7 +107,9 @@ const Login = ({navigation}) => {
               ) : null}
               <View style={LoginStyle.buttonContainer}>
                 {isSubmitting ? (
-                  <Loader />
+                  <View style={{marginTop: Scale(25)}}>
+                    <Loader />
+                  </View>
                 ) : (
                   <ActionButton
                     value={label?.login}

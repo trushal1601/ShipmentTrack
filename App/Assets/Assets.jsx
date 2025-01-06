@@ -29,7 +29,7 @@ export const Images = {
   UnSradio: require('../Assets/Images/radio.png'),
   back_icon: require('../Assets/Images/backo.png'),
   mail_icon: require('../Assets/Images/email.png'),
-  logo: require('../Assets/Images/logo.png'),
+  logo: require('../Assets/Images/logo1.png'),
   notification: require('../Assets/Images/bell.png'),
   icon1: require('../Assets/Images/approval.png'),
   icon2: require('../Assets/Images/done.png'),

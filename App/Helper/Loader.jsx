@@ -18,9 +18,9 @@ const Loader = () => {
   return (
     <View
       style={{
+        flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        flex: 1,
         backgroundColor: Colors.White,
       }}>
       <BarIndicator color={Colors.Primary} size={Scale(25)} />
