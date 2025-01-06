@@ -22,11 +22,8 @@ import {useDispatch, useSelector} from 'react-redux';
 import {language} from '../../../Redux/Actions/authAction';
 import {useLabels} from '../../../Helper/ReduxLabels';
 import Loader from '../../../Helper/Loader';
-import {language_id} from '../../../Redux/Features/LanguageSlice';
-import RNRestart from 'react-native-restart';
 import {homeCount, logOut} from '../../../Redux/Features/HomeSlice';
 import {setEmail} from '../../../Redux/Features/EmailSlice';
-import Pending from 'react-native-vector-icons/MaterialIcons';
 
 const HomeScreen = () => {
   const dispatch = useDispatch();
